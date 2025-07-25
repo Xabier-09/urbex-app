@@ -1,4 +1,3 @@
-// Versiones y sus cambios para el changelog, usando semántica de versiones
 const versiones = {
   "v0.1.0": [
     "Versión inicial del mapa urbano en Leaflet",
@@ -14,11 +13,14 @@ const versiones = {
     "Changelog con versiones múltiples acumulativas",
     "Visualización de todas las versiones anteriores sin borrar",
     "Mejora en el diseño y usabilidad del changelog"
+  ],
+  "v0.3.0": [
+    "Añadida publicación automática con GitHub Pages",
+    "Tutorial para activar GitHub Pages y ver la app en línea"
   ]
 };
 
-// Versión actual mostrada en el HUD
-let versionActual = "v0.2.0";
+let versionActual = "v0.3.0";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("version-info").textContent = versionActual;
