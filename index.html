@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapa Urbex España con Buscador</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="search-panel" role="search" aria-label="Buscar ciudad o pueblo">
+    <input
+      type="search"
+      id="search-input"
+      placeholder="Busca ciudad o pueblo"
+      aria-describedby="search-btn"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+    <button id="search-btn" aria-label="Buscar">Buscar</button>
+    <div id="version-info" onclick="mostrarChangelog()">v0.2.0</div>
+  </div>
+
+  <div id="map"></div>
+
+  <div id="changelog" class="oculto" role="dialog" aria-modal="true" aria-labelledby="changelog-title">
+    <div class="changelog-header">
+      <strong id="changelog-title">Registro de Cambios</strong>
+      <button onclick="ocultarChangelog()" class="cerrar" aria-label="Cerrar changelog">✕</button>
+    </div>
+    <div id="changelog-content"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
