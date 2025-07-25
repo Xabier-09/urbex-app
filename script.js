@@ -15,15 +15,17 @@ const versiones = {
     "Mejora en el diseño y usabilidad del changelog"
   ],
   "v0.3.0": [
-    "Añadida publicación automática con GitHub Pages",
-    "Tutorial para activar GitHub Pages y ver la app en línea"
+    "Añadida publicación automática con GitHub Pages"
+  ],
+  "v0.3.1": [
+    "Añadido icono 🏚 solo en el favicon (pestaña del navegador), sin tocar HUD ni changelog"
   ]
 };
 
-let versionActual = "v0.3.0";
+let versionActual = "v0.3.1";
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("version-info").textContent = versionActual;
+  document.getElementById("version-text").textContent = versionActual;
 });
 
 // Crear el mapa centrado en España, sin controles de zoom
@@ -112,15 +114,4 @@ function ocultarChangelog() {
   setTimeout(() => {
     changelog.classList.add("oculto");
   }, 300);
-}
-
-// Función para añadir una nueva versión con sus cambios
-function añadirVersion(nuevaVersion, listaCambios) {
-  if (versiones[nuevaVersion]) {
-    versiones[nuevaVersion] = versiones[nuevaVersion].concat(listaCambios);
-  } else {
-    versiones[nuevaVersion] = listaCambios;
-  }
-  versionActual = nuevaVersion;
-  document.getElementById("version-info").textContent = nuevaVersion;
 }
