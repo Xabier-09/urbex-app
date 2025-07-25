@@ -19,33 +19,54 @@ const versiones = {
   ],
   "v0.3.1": [
     "Añadido icono 🏚 solo en el favicon (pestaña del navegador), sin tocar HUD ni changelog"
+  ],
+  "v0.4.0": [
+    "Mapa restringido para no salirse del área geográfica de España",
+    "Búsqueda filtrada para devolver solo lugares dentro de España"
+  ],
+  "v0.5.0": [
+    "Limitado zoom mínimo para que no se pueda alejar más allá de España",
+    "Marcador anterior se elimina al hacer nueva búsqueda"
   ]
 };
 
-let versionActual = "v0.3.1";
+let versionActual = "v0.5.0";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("version-text").textContent = versionActual;
 });
 
-// Crear el mapa centrado en España, sin controles de zoom
-const map = L.map('map', { zoomControl: false }).setView([40.4168, -3.7038], 6);
+// Límites geográficos para España (aproximados)
+const southWest = L.latLng(35.0, -10.5);
+const northEast = L.latLng(44.0, 4.5);
+const bounds = L.latLngBounds(southWest, northEast);
 
-// Añadir el mapa base de OpenStreetMap
+// Crear mapa con restricción a España, sin controles de zoom, y con zoom mínimo y máximo
+const map = L.map('map', {
+  zoomControl: false,
+  maxBounds: bounds,
+  maxBoundsViscosity: 0.9,
+  minZoom: 6,   // zoom mínimo que no permite alejarse más (ajusta si quieres)
+  maxZoom: 19
+}).setView([40.4168, -3.7038], 6);
+
+// Añadir capa base OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
   attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Función para buscar con Nominatim (OpenStreetMap)
+let marcadorActual = null;  // variable para guardar marcador activo
+
+// Función buscar con filtro para España
 async function buscarLugar(texto) {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(texto)}`;
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(texto)}&countrycodes=es`;
   const response = await fetch(url);
   const datos = await response.json();
-  return datos; // Array de resultados
+  return datos;
 }
 
-// Evento al hacer clic en botón buscar
+// Botón buscar
 document.getElementById('search-btn').addEventListener('click', async () => {
   const query = document.getElementById('search-input').value.trim();
   if (!query) {
@@ -56,32 +77,37 @@ document.getElementById('search-btn').addEventListener('click', async () => {
   const resultados = await buscarLugar(query);
 
   if (resultados.length === 0) {
-    alert('No se encontró ningún lugar');
+    alert('No se encontró ningún lugar en España');
     return;
   }
 
-  // Tomamos el primer resultado
+  // Primer resultado
   const lugar = resultados[0];
   const lat = lugar.lat;
   const lon = lugar.lon;
 
-  // Centrar mapa y poner marcador
+  // Eliminar marcador anterior si existe
+  if (marcadorActual) {
+    map.removeLayer(marcadorActual);
+  }
+
+  // Centrar y marcar en el mapa
   map.setView([lat, lon], 12);
 
-  L.marker([lat, lon])
+  marcadorActual = L.marker([lat, lon])
     .addTo(map)
     .bindPopup(lugar.display_name)
     .openPopup();
 });
 
-// Buscar al pulsar Enter en el input
+// Enter para buscar
 document.getElementById('search-input').addEventListener('keyup', (event) => {
   if (event.key === 'Enter') {
     document.getElementById('search-btn').click();
   }
 });
 
-// Mostrar changelog con todas las versiones y sus cambios
+// Mostrar changelog completo con versiones acumuladas
 function mostrarChangelog() {
   const changelog = document.getElementById("changelog");
   const content = document.getElementById("changelog-content");
