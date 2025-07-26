@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomControl: false,
     minZoom: 6.5,
     maxZoom: 19
-  }).setView([40.4168, -3.7038], 6.5); // se ve toda España
+  }).setView([40.4168, -3.7038], 6.5);
 
   const bounds = L.latLngBounds([35, -10], [44.5, 5]);
   map.setMaxBounds(bounds);
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const { lat, lon } = data[0];
     if (currentMarker) map.removeLayer(currentMarker);
     currentMarker = L.marker([lat, lon]).addTo(map);
-    map.setView([lat, lon], 14); // zoom de detalle al buscar
+    map.setView([lat, lon], 14);
   });
 
   document.getElementById('clear-marker-btn').addEventListener('click', () => {
@@ -40,4 +40,32 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('close-changelog-btn').addEventListener('click', toggleChangelog);
 
   window.urbexMap = map;
+
+  // === Función para hacer arrastrables los paneles flotantes ===
+  function hacerArrastrable(idPanel) {
+    const panel = document.getElementById(idPanel);
+    const header = panel.querySelector('.panel-header');
+    let offsetX, offsetY, isDragging = false;
+
+    header.addEventListener('mousedown', e => {
+      isDragging = true;
+      offsetX = e.clientX - panel.getBoundingClientRect().left;
+      offsetY = e.clientY - panel.getBoundingClientRect().top;
+      panel.style.transition = 'none';
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      panel.style.left = `${e.clientX - offsetX}px`;
+      panel.style.top = `${e.clientY - offsetY}px`;
+      panel.style.transform = 'none';
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+  }
+
+  hacerArrastrable('changelog');
+  hacerArrastrable('urbex-panel');
 });
