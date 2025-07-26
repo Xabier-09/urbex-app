@@ -1,104 +1,196 @@
-/* Reset básico */
 * { box-sizing: border-box; }
 
 html, body {
-  height: 100%; margin: 0; padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 body { position: relative; }
 
-/* Mapa al fondo */
+/* Mapa */
 #map {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   z-index: 0;
 }
 
-/* HUD */
+/* HUD principal */
 #search-panel {
-  position: absolute; top: 20px; left: 20px; z-index: 1001;
-  background: white; padding: 12px 18px; border-radius: 10px;
+  position: absolute;
+  top: 20px; left: 20px;
+  z-index: 1001;
+  background: white;
+  padding: 12px 18px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
   max-width: 90vw;
 }
+
 #search-panel input {
-  flex: 1; padding: 8px 12px; font-size: 15px;
-  border: 2px solid #ddd; border-radius: 6px;
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
   transition: border-color 0.3s ease;
 }
+
 #search-panel input:focus {
-  border-color: #3b82f6; box-shadow: 0 0 5px rgba(59,130,246,0.5);
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px rgba(59,130,246,0.5);
 }
+
 #search-panel button {
-  background: #3b82f6; color: #fff; border: none;
-  border-radius: 6px; padding: 8px 12px;
-  font-size: 14px; cursor: pointer; transition: background 0.3s;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
+
 #search-panel button:hover { background: #2563eb; }
-#open-urbex-btn { background: #10b981; }
-#open-urbex-btn:hover { background: #059669; }
-#clear-marker-btn { background: #ef4444; }
-#clear-marker-btn:hover { background: #dc2626; }
 
 #version-info {
-  font-size: 13px; color: #0077cc; font-style: italic;
-  cursor: pointer; margin-left: auto;
+  font-size: 13px;
+  color: #0077cc;
+  font-style: italic;
+  cursor: pointer;
+  margin-left: auto;
 }
 
-/* Panel común (changelog, urbex) */
+/* HUD secundario */
+#urbex-hud {
+  position: absolute;
+  top: 100px;  /* bajado para no chocar */
+  left: 20px;
+  z-index: 1001;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#urbex-hud button {
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#urbex-hud button:hover {
+  background: #059669;
+}
+
+/* Panel común */
 .panel-header {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
 }
+
 .cerrar {
-  background: none; border: none; font-size: 20px;
-  color: #c00; cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #c00;
+  cursor: pointer;
 }
+
 #changelog, #urbex-panel {
-  position: absolute; top: 50%; left: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  background: #fff; padding: 20px; width: 360px; max-width:90%;
-  border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  z-index: 1002; opacity: 0; pointer-events: none;
+  background: #fff;
+  padding: 20px;
+  width: 360px;
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  z-index: 1002;
+  opacity: 0;
+  pointer-events: none;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  max-height: 80vh; overflow-y: auto;
+  max-height: 80vh;
+  overflow-y: auto;
 }
+
 #changelog.visible, #urbex-panel.visible {
   transform: translate(-50%, -50%) scale(1);
-  opacity: 1; pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Panel Urbex */
 #urbex-panel .urbex-input-group {
-  display: flex; gap: 6px; margin-bottom: 12px;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
 }
+
 #urbex-panel input {
-  flex: 1; padding: 8px; border: 2px solid #ddd;
-  border-radius: 6px; transition: border-color 0.3s;
+  flex: 1;
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.3s;
 }
+
 #urbex-panel input:focus {
-  border-color: #3b82f6; box-shadow: 0 0 5px rgba(59,130,246,0.5);
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px rgba(59,130,246,0.5);
 }
+
 #urbex-panel button#add-urbex-btn {
-  background: #3b82f6; color: #fff; border: none;
-  border-radius: 6px; padding: 8px 14px; cursor: pointer;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
   transition: background 0.3s;
 }
+
 #urbex-panel button#add-urbex-btn:hover {
   background: #2563eb;
 }
+
 #urbex-list {
-  list-style: none; padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
+
 #urbex-list li {
-  display: flex; justify-content: space-between;
-  align-items: center; padding: 6px 0; border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
 }
+
 #urbex-list li button {
-  background: #ef4444; color: #fff; border: none;
-  border-radius: 4px; padding: 4px 8px; cursor: pointer;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
   transition: background 0.2s;
 }
+
 #urbex-list li button:hover {
   background: #dc2626;
 }

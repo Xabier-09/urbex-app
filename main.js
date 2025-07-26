@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Mapa
   const map = L.map('map', { zoomControl: false, minZoom: 6, maxZoom: 19 })
     .setView([40.4168, -3.7038], 6);
 
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentMarker = null;
 
-  // Búsqueda
   document.getElementById('search-btn').addEventListener('click', async () => {
     const q = document.getElementById('search-input').value.trim();
     if (!q) return;
@@ -27,14 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('clear-marker-btn').addEventListener('click', () => {
-    if (currentMarker) { map.removeLayer(currentMarker); currentMarker = null; }
+    if (currentMarker) {
+      map.removeLayer(currentMarker);
+      currentMarker = null;
+    }
   });
 
-  // Changelog
-  const toggleChangelog = () => document.getElementById('changelog').classList.toggle('visible');
+  // Changelog toggle
+  const toggleChangelog = () =>
+    document.getElementById('changelog').classList.toggle('visible');
   document.getElementById('version-info').addEventListener('click', toggleChangelog);
   document.getElementById('close-changelog-btn').addEventListener('click', toggleChangelog);
 
-  // Exponer mapa para urbex.js
   window.urbexMap = map;
 });

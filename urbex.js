@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&countrycodes=es`);
     const data = await res.json();
     if (!data[0]) return alert('Dirección no encontrada');
+
     const { lat, lon } = data[0];
     const marker = L.marker([lat, lon]).addTo(map).bindPopup(addr);
 
-    // Lista
     const li = document.createElement('li');
     li.textContent = addr;
     const btn = document.createElement('button');
