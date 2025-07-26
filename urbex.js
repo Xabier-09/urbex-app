@@ -2,12 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = window.urbexMap;
   const listEl = document.getElementById('urbex-list');
 
-  // Toggle panel Urbex
   const togglePanel = () => document.getElementById('urbex-panel').classList.toggle('visible');
   document.getElementById('open-urbex-btn').addEventListener('click', togglePanel);
   document.getElementById('close-urbex-btn').addEventListener('click', togglePanel);
 
-  // Función común para añadir un marcador + lista
   const addUrbexSite = (lat, lon, label) => {
     const marker = L.marker([lat, lon]).addTo(map).bindPopup(label);
     const li = document.createElement('li');
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     listEl.appendChild(li);
   };
 
-  // Añadir manual (input de texto)
   document.getElementById('add-urbex-btn').addEventListener('click', async () => {
     const addr = document.getElementById('urbex-input').value.trim();
     if (!addr) return;
@@ -31,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('urbex-input').value = '';
   });
 
-  // Clic en el mapa para añadir sitio
   map.on('click', async e => {
     const { lat, lng } = e.latlng;
     const nombre = prompt('¿Cómo quieres llamar a este lugar?');

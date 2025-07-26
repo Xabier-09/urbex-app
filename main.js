@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     maxZoom: 19
   }).setView([40.4168, -3.7038], 6.5);
 
+  window.urbexMap = map;
+
   const bounds = L.latLngBounds([35, -10], [44.5, 5]);
   map.setMaxBounds(bounds);
   map.on('drag', () => map.panInsideBounds(bounds, { animate: false }));
@@ -51,10 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     header.addEventListener('mousedown', (e) => {
       e.preventDefault();
-
       if (e.button !== 0) return;
 
-      // si es la primera vez, fijamos posición absoluta
       if (!panel.classList.contains('moved')) {
         const rect = panel.getBoundingClientRect();
         panel.style.left = `${rect.left}px`;
@@ -71,12 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-
-      panel.style.left = `${newX}px`;
-      panel.style.top = `${newY}px`;
+      panel.style.left = `${e.clientX - offsetX}px`;
+      panel.style.top = `${e.clientY - offsetY}px`;
     });
 
     document.addEventListener('mouseup', () => {

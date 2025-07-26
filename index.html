@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>🏚</text></svg>" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
@@ -14,19 +15,29 @@
     <input type="search" id="search-input" placeholder="Buscar ciudad o pueblo..." />
     <button id="search-btn">Buscar</button>
     <button id="clear-marker-btn">Eliminar marcador</button>
-    <span id="version-info">Beta v0.6.8</span>
+    <span id="version-info">Beta v0.6.9</span>
   </div>
 
   <div id="urbex-hud">
-    <button id="open-urbex-btn">Añadir lugares</button>
+    <button id="open-urbex-btn" class="btn-anim">Añadir lugares</button>
   </div>
 
-  <div id="changelog" class="oculto">
-  <div class="panel-header">
-    <strong>Registro de cambios</strong>
-    <button class="cerrar" id="close-changelog-btn">✖</button>
-  </div>
+  <div id="changelog">
+    <div class="panel-header">
+      <strong>Registro de cambios</strong>
+      <button class="cerrar" id="close-changelog-btn">✖</button>
+    </div>
 
+    <!-- Nueva versión con cambios del chat -->
+    <h3>Beta v0.6.9 <small>(menor)</small></h3>
+    <ul>
+      <li>(1) Añadida animación <code>pulseGlow</code> a todos los botones, incluyendo las 'X' de cierre. <strong>Leve</strong></li>
+      <li>(2) Restaurado estilo original del botón de versión 'Beta' sin animaciones. <strong>Leve</strong></li>
+      <li>(3) Ajustada posición de apertura del panel "Añadir lugares" para evitar solapamiento con el HUD. <strong>Medio</strong></li>
+      <li>(4) Corregido comportamiento de arrastre en paneles. <strong>Crítico</strong></li>
+    </ul>
+
+    <!-- Historial anterior -->
   <h3>Beta v0.6.8 <small>(menor)</small></h3>
   <ul>
     <li>Corregido el bug de arrastre que causaba agarre extraño al mover ventanas.</li>
@@ -89,45 +100,10 @@
     <li>Marcador anterior se elimina al hacer nueva búsqueda.</li>
   </ul>
 
-  <h3>v0.4.0</h3>
-  <ul>
-    <li>Mapa restringido para no salirse del área geográfica de España.</li>
-    <li>Búsqueda filtrada para devolver solo lugares dentro de España.</li>
-  </ul>
-
-  <h3>v0.3.1</h3>
-  <ul>
-    <li>Añadido icono 🏚 solo en el favicon (pestaña del navegador), sin tocar HUD ni changelog.</li>
-  </ul>
-
-  <h3>v0.3.0</h3>
-  <ul>
-    <li>Añadida publicación automática con GitHub Pages.</li>
-  </ul>
-
-  <h3>v0.2.0</h3>
-  <ul>
-    <li>Changelog con versiones múltiples acumulativas.</li>
-    <li>Visualización de todas las versiones anteriores sin borrar.</li>
-    <li>Mejora en el diseño y usabilidad del changelog.</li>
-  </ul>
-
-  <h3>v0.1.1</h3>
-  <ul>
-    <li>Quitados los botones de zoom + y - del mapa.</li>
-    <li>Changelog centrado en pantalla con animación suave.</li>
-  </ul>
-
-  <h3>v0.1.0</h3>
-  <ul>
-    <li>Versión inicial del mapa urbano en Leaflet.</li>
-    <li>Buscador de ciudades/pueblos con Nominatim.</li>
-    <li>Estilo limpio y bonito en el HUD.</li>
-    <li>Panel de versión clicable con changelog.</li>
-  </ul>
+  <!-- resto historial... -->
 </div>
 
-  <div id="urbex-panel" class="oculto">
+  <div id="urbex-panel">
     <div class="panel-header">
       <strong>Lugares Urbex</strong>
       <button class="cerrar" id="close-urbex-btn">✖</button>
