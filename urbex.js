@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('urbex-input').value = '';
   });
 
-  // Clic en el mapa
+  // Clic en el mapa para añadir sitio
   map.on('click', async e => {
     const { lat, lng } = e.latlng;
     const nombre = prompt('¿Cómo quieres llamar a este lugar?');

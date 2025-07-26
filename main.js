@@ -34,35 +34,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const toggleChangelog = () =>
-    document.getElementById('changelog').classList.toggle('visible');
+  const toggleChangelog = () => {
+    const el = document.getElementById('changelog');
+    el.classList.toggle('visible');
+  };
   document.getElementById('version-info').addEventListener('click', toggleChangelog);
   document.getElementById('close-changelog-btn').addEventListener('click', toggleChangelog);
 
-  window.urbexMap = map;
-
-  // === Función para hacer arrastrables los paneles flotantes ===
-  function hacerArrastrable(idPanel) {
-    const panel = document.getElementById(idPanel);
+  function hacerArrastrable(id) {
+    const panel = document.getElementById(id);
     const header = panel.querySelector('.panel-header');
-    let offsetX, offsetY, isDragging = false;
 
-    header.addEventListener('mousedown', e => {
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    header.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+
+      if (e.button !== 0) return;
+
+      // si es la primera vez, fijamos posición absoluta
+      if (!panel.classList.contains('moved')) {
+        const rect = panel.getBoundingClientRect();
+        panel.style.left = `${rect.left}px`;
+        panel.style.top = `${rect.top}px`;
+        panel.style.transform = `none`;
+        panel.classList.add('moved');
+      }
+
       isDragging = true;
       offsetX = e.clientX - panel.getBoundingClientRect().left;
       offsetY = e.clientY - panel.getBoundingClientRect().top;
-      panel.style.transition = 'none';
+      header.style.cursor = 'grabbing';
     });
 
-    document.addEventListener('mousemove', e => {
+    document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-      panel.style.left = `${e.clientX - offsetX}px`;
-      panel.style.top = `${e.clientY - offsetY}px`;
-      panel.style.transform = 'none';
+
+      const newX = e.clientX - offsetX;
+      const newY = e.clientY - offsetY;
+
+      panel.style.left = `${newX}px`;
+      panel.style.top = `${newY}px`;
     });
 
     document.addEventListener('mouseup', () => {
       isDragging = false;
+      header.style.cursor = 'grab';
     });
   }
 

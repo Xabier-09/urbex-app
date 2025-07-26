@@ -1,119 +1,82 @@
 * { box-sizing: border-box; }
-
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
 }
-
-body { position: relative; }
-
 #map {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 0;
 }
 
+/* Panel búsqueda */
 #search-panel {
   position: absolute;
   top: 20px; left: 20px;
-  z-index: 1001;
   background: white;
-  padding: 12px 18px;
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
-  max-width: 90vw;
+  gap: 8px;
+  z-index: 1001;
 }
-
 #search-panel input {
-  flex: 1;
-  padding: 8px 12px;
-  font-size: 15px;
-  border: 2px solid #ddd;
+  padding: 6px 10px;
   border-radius: 6px;
-  transition: border-color 0.3s ease;
+  border: 1px solid #ccc;
+  flex: 1;
 }
-
-#search-panel input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 5px rgba(59,130,246,0.5);
-}
-
 #search-panel button {
+  padding: 6px 12px;
   background: #3b82f6;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
   cursor: pointer;
-  transition: background 0.3s;
 }
-
-#search-panel button:hover { background: #2563eb; }
-
+#search-panel button:hover {
+  background: #2563eb;
+}
 #version-info {
   font-size: 13px;
   color: #0077cc;
-  font-style: italic;
   cursor: pointer;
   margin-left: auto;
 }
 
+/* HUD Urbex */
 #urbex-hud {
   position: absolute;
   top: 100px;
   left: 20px;
-  z-index: 1001;
   background: white;
-  padding: 8px 12px;
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1001;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
-
 #urbex-hud button {
   background: #10b981;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 14px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background 0.3s;
 }
-
 #urbex-hud button:hover {
   background: #059669;
 }
 
-/* Panel común */
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  cursor: move;
-}
-
-.cerrar {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #c00;
-  cursor: pointer;
-}
-
-#changelog,
-#urbex-panel {
+/* Paneles flotantes */
+#changelog, #urbex-panel {
   position: absolute;
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: #fff;
+  transform: translate(-50%, -50%) scale(0.95);
+  background: white;
   padding: 20px;
   width: 360px;
   max-width: 90%;
@@ -122,14 +85,56 @@ body { position: relative; }
   z-index: 1002;
   opacity: 0;
   pointer-events: none;
-  transition: transform 0.3s ease, opacity 0.3s ease;
   max-height: 80vh;
   overflow-y: auto;
+  transition: opacity 0.3s ease;
 }
-
 #changelog.visible,
 #urbex-panel.visible {
-  transform: scale(1);
   opacity: 1;
   pointer-events: auto;
+  animation: popIn 250ms ease forwards;
+}
+@keyframes popIn {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+#changelog.moved,
+#urbex-panel.moved {
+  transform: none !important;
+  top: unset;
+  left: unset;
+}
+
+/* Cabecera arrastrable */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: grab;
+  user-select: none;
+}
+.panel-header:active {
+  cursor: grabbing;
+}
+.cerrar {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #c00;
+  cursor: pointer;
+}
+.panel-header {
+  cursor: grab;
+  user-select: none;
+}
+.panel-header:active {
+  cursor: grabbing;
 }
