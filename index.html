@@ -2,47 +2,108 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MAPA URBEX</title>
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>🏚</text></svg>" />
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>🏚</text></svg>" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
-  <div id="search-panel" role="search" aria-label="Buscar ciudad o pueblo">
-    <input
-      type="search"
-      id="search-input"
-      placeholder="Busca ciudad o pueblo"
-      aria-describedby="search-btn"
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="off"
-      spellcheck="false"
-    />
-    <button id="search-btn" aria-label="Buscar">Buscar</button>
-    <div id="version-info" onclick="mostrarChangelog()">
-      <span id="version-text"></span>
-    </div>
+  <!-- HUD -->
+  <div id="search-panel">
+    <input type="search" id="search-input" placeholder="Buscar ciudad o pueblo..." />
+    <button id="search-btn">Buscar</button>
+    <button id="clear-marker-btn">Eliminar marcador</button>
+    <button id="open-urbex-btn">Lugares Urbex</button>
+    <span id="version-info">Beta v0.6.0</span>
   </div>
 
+ <!-- Changelog -->
+<div id="changelog" class="oculto">
+  <div class="panel-header">
+    <strong>Registro de cambios</strong>
+    <button class="cerrar" id="close-changelog-btn">✖</button>
+  </div>
+
+  <h3>Beta v0.6.0</h3>
+  <ul>
+    <li>Panel Urbex estilizado: mejor UX al añadir/eliminar sitios.</li>
+    <li>Changelog actualizado con v0.6.0</li>
+  </ul>
+
+  <h3>Beta v0.5.1</h3>
+  <ul>
+    <li>Panel Urbex funcional: añadir/eliminar marcadores.</li>
+    <li>Botón en HUD para abrir el panel de marcadores.</li>
+  </ul>
+
+  <h3>v0.5.0</h3>
+  <ul>
+    <li>Limitado zoom mínimo para no alejarse más allá de España.</li>
+    <li>Marcador anterior se elimina al hacer nueva búsqueda.</li>
+  </ul>
+
+  <h3>v0.4.0</h3>
+  <ul>
+    <li>Mapa restringido para no salirse del área geográfica de España.</li>
+    <li>Búsqueda filtrada para devolver solo lugares dentro de España.</li>
+  </ul>
+
+  <h3>v0.3.1</h3>
+  <ul>
+    <li>Añadido icono 🏚 solo en el favicon (pestaña del navegador), sin tocar HUD ni changelog.</li>
+  </ul>
+
+  <h3>v0.3.0</h3>
+  <ul>
+    <li>Añadida publicación automática con GitHub Pages.</li>
+  </ul>
+
+  <h3>v0.2.0</h3>
+  <ul>
+    <li>Changelog con versiones múltiples acumulativas.</li>
+    <li>Visualización de todas las versiones anteriores sin borrar.</li>
+    <li>Mejora en el diseño y usabilidad del changelog.</li>
+  </ul>
+
+  <h3>v0.1.1</h3>
+  <ul>
+    <li>Quitados los botones de zoom + y - del mapa.</li>
+    <li>Changelog centrado en pantalla con animación suave.</li>
+  </ul>
+
+  <h3>v0.1.0</h3>
+  <ul>
+    <li>Versión inicial del mapa urbano en Leaflet.</li>
+    <li>Buscador de ciudades/pueblos con Nominatim.</li>
+    <li>Estilo limpio y bonito en el HUD.</li>
+    <li>Panel de versión clicable con changelog.</li>
+  </ul>
+</div>
+
+
+  <!-- Panel Urbex -->
+  <div id="urbex-panel" class="oculto">
+    <div class="panel-header">
+      <strong>Lugares Urbex</strong>
+      <button class="cerrar" id="close-urbex-btn">✖</button>
+    </div>
+    <div class="urbex-input-group">
+      <input type="text" id="urbex-input" placeholder="Dirección..." />
+      <button id="add-urbex-btn">Añadir</button>
+    </div>
+    <ul id="urbex-list"></ul>
+  </div>
+
+  <!-- Mapa -->
   <div id="map"></div>
 
-  <div id="changelog" class="oculto" role="dialog" aria-modal="true" aria-labelledby="changelog-title">
-    <div class="changelog-header">
-      <strong id="changelog-title">Registro de Cambios</strong>
-      <button onclick="ocultarChangelog()" class="cerrar" aria-label="Cerrar changelog">✕</button>
-    </div>
-    <div id="changelog-content"></div>
-  </div>
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
+  <!-- Scripts -->
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script defer src="main.js"></script>
+  <script defer src="urbex.js"></script>
 </body>
 </html>
