@@ -2,8 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     zoomControl: false,
     minZoom: 6.5,
-    maxZoom: 19
-  }).setView([40.4168, -3.7038], 6.5);
+    maxZoom: 19, attributionControl: false}).setView([40.4168, -3.7038], 6.5);
 
   window.urbexMap = map;
 

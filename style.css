@@ -4,6 +4,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  overflow: hidden; /* Hide page scrollbar */
   font-family: 'Comfortaa', cursive;
 }
 #map {
@@ -32,8 +33,9 @@ html, body {
 
 /* Version Info */
 #version-info {
-  font-size: 13px; color: #0077cc; cursor: pointer; margin-left: auto;
+  font-size: 13px; color: #0077cc;
   background: none; animation: none; transition: none; transform: none;
+  margin-left: auto;
 }
 #version-info:hover { text-decoration: underline; }
 
@@ -59,9 +61,7 @@ html, body {
   overflow-y: auto; max-height: 80vh;
   opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
 }
-#changelog.visible {
-  top: 300px; opacity: 1; pointer-events: auto;
-}
+#changelog.visible { top: 300px; opacity: 1; pointer-events: auto; }
 
 /* Panel Urbex */
 #urbex-panel {
@@ -71,33 +71,45 @@ html, body {
   transition: max-height 0.3s ease, opacity 0.3s ease;
   opacity: 0; max-height: 0; pointer-events: none;
 }
-#urbex-panel.visible {
-  top: 180px; opacity: 1; max-height: 500px; pointer-events: auto;
-}
+#urbex-panel.visible { top: 180px; opacity: 1; max-height: 500px; pointer-events: auto; }
 
 /* Common */
-.panel-header { display: flex; justify-content: space-between; align-items: center; cursor: grab; user-select: none; margin-bottom: 8px; }
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: grab; user-select: none; margin-bottom: 8px;
+}
 .panel-header:active { cursor: grabbing; }
 .cerrar {
   background: none; border: none; color: #c00; font-size: 18px;
-  cursor: pointer; animation: pulseGlow 2s infinite ease-in-out; transition: transform 0.3s ease;
+  cursor: pointer; animation: pulseGlow 2s infinite ease-in-out;
+  transition: transform 0.3s ease;
 }
 .cerrar:hover { transform: scale(1.05) rotate(-2deg); }
 .cerrar:active { transform: scale(0.95) rotate(2deg); }
 
 /* Urbex Input */
 .urbex-input-group { display: flex; margin-bottom: 10px; }
-#urbex-input { flex: 1; padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px 0 0 6px; }
+#urbex-input {
+  flex: 1; padding: 6px 10px; border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+}
 #add-urbex-btn {
   background: #10b981; color: white; border: none; border-radius: 0 6px 6px 0;
-  padding: 6px 12px; cursor: pointer; animation: pulseGlow 2s infinite ease-in-out; transition: transform 0.3s ease;
+  padding: 6px 12px; cursor: pointer;
+  animation: pulseGlow 2s infinite ease-in-out; transition: transform 0.3s ease;
 }
 #add-urbex-btn:hover { transform: scale(1.05) rotate(-2deg); }
 #add-urbex-btn:active { transform: scale(0.95) rotate(2deg); }
 
 /* List */
 #urbex-list { list-style: none; padding: 0; margin: 0; }
-#urbex-list li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #eee; }
-#urbex-list li button { background: none; border: none; color: #c00; cursor: pointer; animation: pulseGlow 2s infinite ease-in-out; transition: transform 0.3s ease; }
+#urbex-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid #eee;
+}
+#urbex-list li button {
+  background: none; border: none; color: #c00; cursor: pointer;
+  animation: pulseGlow 2s infinite ease-in-out; transition: transform 0.3s ease;
+}
 #urbex-list li button:hover { transform: scale(1.05) rotate(-2deg); }
 #urbex-list li button:active { transform: scale(0.95) rotate(2deg); }
