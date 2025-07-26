@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const map = L.map('map', { zoomControl: false, minZoom: 6, maxZoom: 19 })
-    .setView([40.4168, -3.7038], 6);
+  const map = L.map('map', {
+    zoomControl: false,
+    minZoom: 6.5,
+    maxZoom: 19
+  }).setView([40.4168, -3.7038], 6.5); // se ve toda España
 
   const bounds = L.latLngBounds([35, -10], [44.5, 5]);
   map.setMaxBounds(bounds);
@@ -21,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const { lat, lon } = data[0];
     if (currentMarker) map.removeLayer(currentMarker);
     currentMarker = L.marker([lat, lon]).addTo(map);
-    map.setView([lat, lon], 14);
+    map.setView([lat, lon], 14); // zoom de detalle al buscar
   });
 
   document.getElementById('clear-marker-btn').addEventListener('click', () => {
@@ -31,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Changelog toggle
   const toggleChangelog = () =>
     document.getElementById('changelog').classList.toggle('visible');
   document.getElementById('version-info').addEventListener('click', toggleChangelog);
