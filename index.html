@@ -22,11 +22,121 @@
     <button id="open-urbex-btn" class="btn-anim">Añadir lugares</button>
   </div>
 
+  
   <div id="changelog">
+    
+
     <div class="panel-header">
       <strong>Registro de cambios</strong>
       <button class="cerrar" id="close-changelog-btn">✖</button>
     </div>
+    <div class="changelog-content">
+      <h3>Beta v0.7.0 <small>(menor)</small></h3>
+    <ul>
+      <li>Implementada fuente Comfortaa en toda la interfaz. <strong>Medio</strong></li>
+      <li>Añadida animación <code>pulseGlow</code> a todos los botones principales. <strong>Leve</strong></li>
+      <li>Ampliado ancho del panel de registro de cambios a 400px con scroll interno. <strong>Leve</strong></li>
+    </ul>
+
+  <h3>Beta v0.6.9 <small>(menor)</small></h3>
+      <ul>
+        <li>(1) Añadida animación <code>pulseGlow</code> a todos los botones, incluyendo las 'X' de cierre. <strong>Leve</strong></li>
+        <li>(2) Restaurado estilo original del botón de versión 'Beta' sin animaciones. <strong>Leve</strong></li>
+        <li>(3) Ajustada posición de apertura del panel "Añadir lugares" para evitar solapamiento con el HUD. <strong>Medio</strong></li>
+        <li>(4) Corregido comportamiento de arrastre en paneles. <strong>Crítico</strong></li>
+      </ul>
+      <h3>Beta v0.7.0 <small>(menor)</small></h3>
+      <ul>
+        <li>Implementada fuente Comfortaa en toda la interfaz. <strong>Medio</strong></li>
+        <li>Añadida animación <code>pulseGlow</code> a todos los botones principales. <strong>Leve</strong></li>
+        <li>Ampliado ancho del panel de registro de cambios a 400px con scroll interno. <strong>Leve</strong></li>
+      </ul>
+
+      <h3>Beta v0.6.8 <small>(menor)</small></h3>
+      <ul>
+        <li>Corregido el bug de arrastre que causaba agarre extraño al mover ventanas.</li>
+        <li>Solo se puede arrastrar haciendo clic en la cabecera, no en cualquier parte del panel.</li>
+        <li>Cursor visual de arrastre (grab/grabbing) añadido.</li>
+      </ul>
+      <h3>Beta v0.6.7 <small>(menor)</small></h3>
+      <ul>
+        <li>Ventanas flotantes ya no “saltan” al moverse. Corrección de animación y bugs de posición.</li>
+      </ul>
+      <h3>Beta v0.6.6 <small>(menor)</small></h3>
+      <ul>
+        <li>Ventanas flotantes (Changelog y Urbex) con animación de entrada sin moverse del sitio inicial.</li>
+      </ul>
+      <h3>Beta v0.6.5 <small>(menor)</small></h3>
+      <ul>
+        <li>Los paneles (changelog y lugares urbex) ahora son arrastrables y flotantes.</li>
+      </ul>
+      <h3>Beta v0.6.4</h3>
+      <ul>
+        <li>Zoom inicial ajustado para mostrar toda España completa.</li>
+        <li>Bloqueado el zoom out: solo se puede ampliar desde esa vista.</li>
+      </ul>
+      <h3>Beta v0.6.3</h3>
+      <ul>
+        <li>Eliminada máscara fuera de España.</li>
+        <li>Zoom mínimo limitado para no poder alejarse más allá del país.</li>
+      </ul>
+      <h3>Beta v0.6.2</h3>
+      <ul>
+        <li>Permitir clic en el mapa para añadir un sitio Urbex con diálogo de confirmación.</li>
+      </ul>
+      <h3>Beta v0.6.1</h3>
+      <ul>
+        <li>Ajuste de posición del HUD secundario para evitar colisión con HUD principal.</li>
+      </ul>
+      <h3>Beta v0.6.0</h3>
+      <ul>
+        <li>Panel Urbex estilizado: mejor UX al añadir/eliminar sitios.</li>
+        <li>Changelog actualizado con v0.6.0.</li>
+      </ul>
+      <h3>Beta v0.5.1</h3>
+      <ul>
+        <li>Panel Urbex funcional: añadir/eliminar marcadores.</li>
+        <li>Botón en HUD para abrir el panel de marcadores.</li>
+      </ul>
+      <h3>v0.5.0</h3>
+      <ul>
+        <li>Limitado zoom mínimo para no alejarse más allá de España.</li>
+        <li>Marcador anterior se elimina al hacer nueva búsqueda.</li>
+      </ul>
+      <h3>v0.4.0</h3>
+      <ul>
+        <li>Mapa restringido para no salirse del área geográfica de España.</li>
+        <li>Búsqueda filtrada para devolver solo lugares dentro de España.</li>
+      </ul>
+      <h3>v0.3.1</h3>
+      <ul>
+        <li>Añadido icono 🏚 solo en el favicon (pestaña del navegador), sin tocar HUD ni changelog.</li>
+      </ul>
+      <h3>v0.3.0</h3>
+      <ul>
+        <li>Añadida publicación automática con GitHub Pages.</li>
+      </ul>
+      <h3>v0.2.0</h3>
+      <ul>
+        <li>Changelog con versiones múltiples acumulativas.</li>
+        <li>Visualización de todas las versiones anteriores sin borrar.</li>
+        <li>Mejora en el diseño y usabilidad del changelog.</li>
+      </ul>
+      <h3>v0.1.1</h3>
+      <ul>
+        <li>Quitados los botones de zoom + y - del mapa.</li>
+        <li>Changelog centrado en pantalla con animación suave.</li>
+      </ul>
+      <h3>v0.1.0</h3>
+      <ul>
+        <li>Versión inicial del mapa urbano en Leaflet.</li>
+        <li>Buscador de ciudades/pueblos con Nominatim.</li>
+        <li>Estilo limpio y bonito en el HUD.</li>
+        <li>Panel de versión clicable con changelog.</li>
+      </ul>
+    </div>
+  </div>
+
 
     <!-- Nueva versión con cambios del chat -->
     <h3>Beta v0.6.9 <small>(menor)</small></h3>
@@ -36,6 +146,13 @@
       <li>(3) Ajustada posición de apertura del panel "Añadir lugares" para evitar solapamiento con el HUD. <strong>Medio</strong></li>
       <li>(4) Corregido comportamiento de arrastre en paneles. <strong>Crítico</strong></li>
     </ul>
+      <h3>Beta v0.7.0 <small>(menor)</small></h3>
+      <ul>
+        <li>Implementada fuente Comfortaa en toda la interfaz. <strong>Medio</strong></li>
+        <li>Añadida animación <code>pulseGlow</code> a todos los botones principales. <strong>Leve</strong></li>
+        <li>Ampliado ancho del panel de registro de cambios a 400px con scroll interno. <strong>Leve</strong></li>
+      </ul>
+
 
     <!-- Historial anterior -->
   <h3>Beta v0.6.8 <small>(menor)</small></h3>
