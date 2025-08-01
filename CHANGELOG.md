@@ -1,4 +1,10 @@
-# Registro de cambios MAPA URBEX
+## Beta v0.7.1 (menor)
+- Añadida lista toodo funcional con sitios explorados y no explorados en ventana arrastrable.
+- Añadido botón para mostrar/ocultar la lista toodo debajo de "Añadir lugares".
+- Al añadir un lugar, se añade automáticamente a la lista de no explorados y el marcador es azul.
+- Cuando un lugar se marca como explorado, el marcador cambia a verde.
+- Corrección de bugs menores en la interfaz y funcionalidad.
+- Actualización de la experiencia de usuario con nuevas funcionalidades.
 
 ## Beta v0.6.9 (menor)
 1. Añadida animación `pulseGlow` a todos los botones, incluyendo las 'X' de cierre. **Leve**

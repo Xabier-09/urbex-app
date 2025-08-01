@@ -73,6 +73,16 @@ html, body {
 }
 #urbex-panel.visible { top: 180px; opacity: 1; max-height: 500px; pointer-events: auto; }
 
+/* Panel TODO */
+#todo-panel {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 300px; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0; max-height: 0; pointer-events: none;
+}
+#todo-panel.visible { top: 180px; opacity: 1; max-height: 500px; pointer-events: auto; }
+
 /* Common */
 .panel-header {
   display: flex; justify-content: space-between; align-items: center;
@@ -113,3 +123,36 @@ html, body {
 }
 #urbex-list li button:hover { transform: scale(1.05) rotate(-2deg); }
 #urbex-list li button:active { transform: scale(0.95) rotate(2deg); }
+
+/* Todo List */
+.todo-content h4 {
+  margin: 10px 0 5px 0;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+.todo-list li button {
+  background: none;
+  border: none;
+  color: #0077cc;
+  cursor: pointer;
+  animation: pulseGlow 2s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
+.todo-list li button:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+.todo-list li button:active {
+  transform: scale(0.95) rotate(2deg);
+}

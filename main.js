@@ -82,4 +82,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   hacerArrastrable('changelog');
   hacerArrastrable('urbex-panel');
+  hacerArrastrable('todo-panel');
 });
