@@ -118,12 +118,90 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('urbex-input').value = '';
   });
 
-  map.on('click', async e => {
-    const { lat, lng } = e.latlng;
-    const nombre = prompt('¿Cómo quieres llamar a este lugar?');
-    if (!nombre || !nombre.trim()) return;
-    addUrbexSite(lat, lng, nombre.trim());
+  // New draggable function copied from main.js
+  function hacerArrastrable(id) {
+    const panel = document.getElementById(id);
+    const header = panel.querySelector('.panel-header');
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    header.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      if (e.button !== 0) return;
+
+      if (!panel.classList.contains('moved')) {
+        const rect = panel.getBoundingClientRect();
+        panel.style.left = `${rect.left}px`;
+        panel.style.top = `${rect.top}px`;
+        panel.style.transform = `none`;
+        panel.classList.add('moved');
+      }
+
+      isDragging = true;
+      offsetX = e.clientX - panel.getBoundingClientRect().left;
+      offsetY = e.clientY - panel.getBoundingClientRect().top;
+      header.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panel.style.left = `${e.clientX - offsetX}px`;
+      panel.style.top = `${e.clientY - offsetY}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      header.style.cursor = 'grab';
+    });
+  }
+
+  // Show/hide functions for map click panel
+  const mapClickPanel = document.getElementById('map-click-panel');
+  const mapClickNameInput = document.getElementById('map-click-name');
+  const mapClickCoordsDiv = document.getElementById('map-click-coords');
+  const saveMapClickBtn = document.getElementById('save-map-click-btn');
+  const closeMapClickBtn = document.getElementById('close-map-click-panel');
+
+  function showMapClickPanel(lat, lng) {
+    mapClickCoordsDiv.textContent = `Coordenadas: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    mapClickNameInput.value = '';
+    mapClickPanel.classList.add('visible');
+  }
+
+  function hideMapClickPanel() {
+    mapClickPanel.classList.remove('visible');
+  }
+
+  closeMapClickBtn.addEventListener('click', () => {
+    hideMapClickPanel();
   });
+
+  saveMapClickBtn.addEventListener('click', () => {
+    const name = mapClickNameInput.value.trim();
+    if (!name) {
+      alert('Por favor, introduce un nombre para el lugar.');
+      return;
+    }
+    const coordsText = mapClickCoordsDiv.textContent;
+    const coordsMatch = coordsText.match(/Coordenadas: ([\d.-]+), ([\d.-]+)/);
+    if (!coordsMatch) return;
+    const lat = parseFloat(coordsMatch[1]);
+    const lng = parseFloat(coordsMatch[2]);
+    addUrbexSite(lat, lng, name);
+    hideMapClickPanel();
+  });
+
+  // Modify map click handler to show custom panel instead of prompt
+  map.off('click'); // Remove previous click handlers
+  map.on('click', e => {
+    const { lat, lng } = e.latlng;
+    showMapClickPanel(lat, lng);
+  });
+
+  // Make the new panel draggable
+  hacerArrastrable('map-click-panel');
 
   // Function to load and render changelog markdown
   async function loadChangelog() {

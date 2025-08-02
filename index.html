@@ -16,7 +16,7 @@
     <input type="search" id="search-input" placeholder="Buscar ciudad o pueblo..." />
     <button id="search-btn">Buscar</button>
     <button id="clear-marker-btn">Eliminar marcador</button>
-    <span id="version-info">Beta v0.7.1</span>
+    <span id="version-info">Beta v0.7.2</span>
   </div>
 
   <div id="urbex-hud">
@@ -47,7 +47,7 @@
 
   <div id="todo-panel" class="panel">
     <div class="panel-header">
-      <strong>Lista TODO</strong>
+      <strong>Lista TooDo</strong>
       <button class="cerrar" id="close-todo-btn">✖</button>
     </div>
     <div class="todo-content">
@@ -59,6 +59,19 @@
   </div>
 
   <div id="map"></div>
+
+  <div id="map-click-panel" class="panel">
+    <div class="panel-header">
+      <strong>Nuevo Lugar</strong>
+      <button class="cerrar" id="close-map-click-panel">✖</button>
+    </div>
+    <div class="map-click-content" style="padding: 10px;">
+      <label for="map-click-name">Nombre:</label>
+      <input type="text" id="map-click-name" placeholder="Nombre del lugar" style="width: 100%; margin-bottom: 10px; padding: 6px; border-radius: 6px; border: 1px solid #ccc;" />
+      <div id="map-click-coords" style="font-size: 0.9em; color: #555; margin-bottom: 10px;"></div>
+      <button id="save-map-click-btn" class="btn-anim" style="width: 100%;">Guardar</button>
+    </div>
+  </div>
 
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script defer src="main.js"></script>

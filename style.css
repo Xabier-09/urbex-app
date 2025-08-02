@@ -156,3 +156,91 @@ html, body {
 .todo-list li button:active {
   transform: scale(0.95) rotate(2deg);
 }
+
+/* Map Click Panel */
+#map-click-panel {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 300px; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0; max-height: 0; pointer-events: none;
+}
+#map-click-panel.visible {
+  top: 180px; opacity: 1; max-height: 500px; pointer-events: auto;
+}
+
+#map-click-panel .panel-header {
+  font-weight: 700;
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+}
+#map-click-panel .panel-header:active {
+  cursor: grabbing;
+}
+#map-click-panel .cerrar {
+  background: none;
+  border: none;
+  color: #c00;
+  font-size: 20px;
+  cursor: pointer;
+  animation: pulseGlow 2s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
+#map-click-panel .cerrar:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+#map-click-panel .cerrar:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+#map-click-panel label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+#map-click-panel input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  margin-bottom: 12px;
+  transition: border-color 0.3s ease;
+}
+#map-click-panel input[type="text"]:focus {
+  border-color: #10b981;
+  outline: none;
+}
+
+#map-click-panel #map-click-coords {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+#map-click-panel #save-map-click-btn {
+  width: 100%;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+  animation: pulseGlow 2s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
+#map-click-panel #save-map-click-btn:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+#map-click-panel #save-map-click-btn:active {
+  transform: scale(0.95) rotate(2deg);
+}

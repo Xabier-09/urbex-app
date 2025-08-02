@@ -1,3 +1,10 @@
+## Beta v0.7.2 (menor)
+- Añadido nuevo panel personalizado para añadir lugares haciendo clic en el mapa, con estilo y comportamiento consistente con otros paneles.
+- Reemplazado el diálogo prompt por un panel con entrada para nombre, visualización de coordenadas y botones guardar/cerrar.
+- Panel nuevo es arrastrable y estilizado con animaciones y efectos coherentes.
+- Mejoras en CSS para el nuevo panel, incluyendo estilos para inputs, botones y cabecera.
+- Pruebas exhaustivas realizadas para asegurar funcionalidad y experiencia de usuario sin regresiones.
+
 ## Beta v0.7.1 (menor)
 - Añadida lista toodo funcional con sitios explorados y no explorados en ventana arrastrable.
 - Añadido botón para mostrar/ocultar la lista toodo debajo de "Añadir lugares".
