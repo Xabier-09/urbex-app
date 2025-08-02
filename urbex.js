@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const togglePanel = () => {
     const panel = document.getElementById('urbex-panel');
+    // const mapClickPanel = document.getElementById('map-click-panel');
+    
     if (panel.classList.contains('visible')) {
       panel.classList.remove('visible');
     } else {
@@ -11,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
       panel.style.top = '185px';
       panel.classList.add('visible');
     }
+    
+    // Removed repositioning of map-click-panel to prevent it moving when urbex panel toggles
+    // if (mapClickPanel.classList.contains('visible')) {
+    //   positionMapClickPanel();
+    // }
   };
   document.getElementById('open-urbex-btn').addEventListener('click', togglePanel);
   document.getElementById('close-urbex-btn').addEventListener('click', togglePanel);
@@ -18,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Todo panel toggle
   const toggleTodoPanel = () => {
     const panel = document.getElementById('todo-panel');
+    // const mapClickPanel = document.getElementById('map-click-panel');
+    
     if (panel.classList.contains('visible')) {
       panel.classList.remove('visible');
     } else {
@@ -25,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
       panel.style.top = '300px';
       panel.classList.add('visible');
     }
+    
+    // Removed repositioning of map-click-panel to prevent it moving when todo panel toggles
+    // positionMapClickPanel();
   };
   document.getElementById('open-todo-btn').addEventListener('click', toggleTodoPanel);
   document.getElementById('close-todo-btn').addEventListener('click', toggleTodoPanel);
@@ -181,10 +193,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapClickCoordsDiv = document.getElementById('map-click-coords');
   const saveMapClickBtn = document.getElementById('save-map-click-btn');
   const closeMapClickBtn = document.getElementById('close-map-click-panel');
+  const todoPanel = document.getElementById('todo-panel');
+
+  // Function to position the map-click-panel below the todo-panel
+  function positionMapClickPanel() {
+    const mapClickPanel = document.getElementById('map-click-panel');
+    // Remove dynamic positioning, set fixed position below todo-panel
+    mapClickPanel.style.top = '450px'; // Fixed position below todo-panel at 300px
+  }
 
   function showMapClickPanel(lat, lng) {
     mapClickCoordsDiv.textContent = `Coordenadas: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
     mapClickNameInput.value = '';
+    
+    // Set fixed position below todo-panel
+    mapClickPanel.style.top = '450px';
+    
+    // Show the panel after setting position
     mapClickPanel.classList.add('visible');
   }
 

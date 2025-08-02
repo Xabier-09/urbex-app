@@ -1,9 +1,15 @@
+## Beta v0.7.4 (menor)
+- Ajustada la posición del panel "Nuevo Lugar" para que aparezca siempre debajo del panel "Lista TooDo" sin cálculos dinámicos.
+- Eliminada la lógica de cálculo de posición dinámica para simplificar la experiencia de usuario.
+- Mejoras en la estabilidad y consistencia visual de los paneles flotantes.
+
 ## Beta v0.7.3 (menor)
 - Ajustada la posición inicial de apertura de los paneles para mejor alineación visual:
   - Panel "Lugares Urbex" abre más abajo, entre los botones y la lista.
   - Panel "Lista TooDo" ajustado para abrir más abajo.
   - Panel "Registro de cambios" ahora se abre centrado en la pantalla.
 - Mejoras en la experiencia de usuario con posiciones de paneles más intuitivas y consistentes.
+
 
 ## Beta v0.7.2 (menor)
 - Añadido nuevo panel personalizado para añadir lugares haciendo clic en el mapa, con estilo y comportamiento consistente con otros paneles.

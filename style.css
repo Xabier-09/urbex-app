@@ -166,7 +166,7 @@ html, body {
   opacity: 0; max-height: 0; pointer-events: none;
 }
 #map-click-panel.visible {
-  top: 180px; opacity: 1; max-height: 500px; pointer-events: auto;
+  opacity: 1; max-height: 500px; pointer-events: auto;
 }
 
 #map-click-panel .panel-header {
