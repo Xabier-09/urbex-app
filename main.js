@@ -37,7 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const toggleChangelog = () => {
     const el = document.getElementById('changelog');
-    el.classList.toggle('visible');
+    if (el.classList.contains('visible')) {
+      el.classList.remove('visible');
+    } else {
+      // Center the changelog panel
+      const panelWidth = el.offsetWidth;
+      const panelHeight = el.offsetHeight;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      el.style.left = `${(windowWidth - panelWidth) / 2}px`;
+      el.style.top = `${(windowHeight - panelHeight) / 2}px`;
+      el.classList.add('visible');
+    }
   };
   document.getElementById('version-info').addEventListener('click', toggleChangelog);
   document.getElementById('close-changelog-btn').addEventListener('click', toggleChangelog);

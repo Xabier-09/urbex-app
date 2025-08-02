@@ -1,3 +1,10 @@
+## Beta v0.7.3 (menor)
+- Ajustada la posición inicial de apertura de los paneles para mejor alineación visual:
+  - Panel "Lugares Urbex" abre más abajo, entre los botones y la lista.
+  - Panel "Lista TooDo" ajustado para abrir más abajo.
+  - Panel "Registro de cambios" ahora se abre centrado en la pantalla.
+- Mejoras en la experiencia de usuario con posiciones de paneles más intuitivas y consistentes.
+
 ## Beta v0.7.2 (menor)
 - Añadido nuevo panel personalizado para añadir lugares haciendo clic en el mapa, con estilo y comportamiento consistente con otros paneles.
 - Reemplazado el diálogo prompt por un panel con entrada para nombre, visualización de coordenadas y botones guardar/cerrar.

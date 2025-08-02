@@ -2,12 +2,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = window.urbexMap;
   const listEl = document.getElementById('urbex-list');
 
-  const togglePanel = () => document.getElementById('urbex-panel').classList.toggle('visible');
+  const togglePanel = () => {
+    const panel = document.getElementById('urbex-panel');
+    if (panel.classList.contains('visible')) {
+      panel.classList.remove('visible');
+    } else {
+      panel.style.left = '20px';
+      panel.style.top = '185px';
+      panel.classList.add('visible');
+    }
+  };
   document.getElementById('open-urbex-btn').addEventListener('click', togglePanel);
   document.getElementById('close-urbex-btn').addEventListener('click', togglePanel);
 
   // Todo panel toggle
-  const toggleTodoPanel = () => document.getElementById('todo-panel').classList.toggle('visible');
+  const toggleTodoPanel = () => {
+    const panel = document.getElementById('todo-panel');
+    if (panel.classList.contains('visible')) {
+      panel.classList.remove('visible');
+    } else {
+      panel.style.left = '20px';
+      panel.style.top = '300px';
+      panel.classList.add('visible');
+    }
+  };
   document.getElementById('open-todo-btn').addEventListener('click', toggleTodoPanel);
   document.getElementById('close-todo-btn').addEventListener('click', toggleTodoPanel);
 
