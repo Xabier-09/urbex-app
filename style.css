@@ -1,0 +1,370 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap');
+
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Hide page scrollbar */
+  font-family: 'Comfortaa', cursive;
+}
+#map {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+}
+
+/* Panel búsqueda */
+#search-panel {
+  position: absolute; top: 20px; left: 20px;
+  background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  display: flex; align-items: center; gap: 8px; z-index: 1001;
+}
+#search-panel input {
+  padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; flex: 1;
+}
+#search-panel button {
+  padding: 6px 12px; background: #3b82f6; color: white;
+  border: none; border-radius: 6px; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#search-panel button:hover { transform: scale(1.05) rotate(-2deg); }
+#search-panel button:active { transform: scale(0.95) rotate(2deg); }
+
+/* Version Info */
+#version-info {
+  font-size: 13px; color: #0077cc;
+  background: none; animation: none; transition: none; transform: none;
+  margin-left: auto;
+}
+#version-info:hover { text-decoration: underline; }
+
+/* HUD Urbex */
+#urbex-hud {
+  position: absolute; top: 100px; left: 20px;
+  background: white; padding: 10px; border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1001;
+}
+#urbex-hud .btn-anim {
+  background: #10b981; color: white; border: none; border-radius: 6px;
+  padding: 10px 16px; font-weight: bold; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#urbex-hud .btn-anim:hover { transform: scale(1.1) rotate(-3deg); }
+#urbex-hud .btn-anim:active { transform: scale(0.95) rotate(3deg); }
+
+/* Changelog Panel */
+#changelog {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 400px; max-width: 90%;
+  overflow-y: auto; max-height: 80vh;
+  opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+}
+#changelog.visible { top: 300px; opacity: 1; pointer-events: auto; }
+
+/* Panel Urbex */
+#urbex-panel {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 300px; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0; max-height: 0; pointer-events: none;
+}
+#urbex-panel.visible { top: 180px; opacity: 1; max-height: 500px; pointer-events: auto; }
+
+/* Panel TODO */
+#todo-panel {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 300px; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0; max-height: 0; pointer-events: none;
+}
+#todo-panel.visible { top: 180px; opacity: 1; max-height: 500px; pointer-events: auto; }
+
+/* Common */
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: grab; user-select: none; margin-bottom: 8px;
+}
+.panel-header:active { cursor: grabbing; }
+.cerrar {
+  background: none; border: none; color: #c00; font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.cerrar:hover { transform: scale(1.05) rotate(-2deg); }
+.cerrar:active { transform: scale(0.95) rotate(2deg); }
+
+/* Urbex Input */
+.urbex-input-group { display: flex; margin-bottom: 10px; }
+#urbex-input {
+  flex: 1; padding: 6px 10px; border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+}
+#add-urbex-btn {
+  background: #10b981; color: white; border: none; border-radius: 0 6px 6px 0;
+  padding: 6px 12px; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#add-urbex-btn:hover { transform: scale(1.05) rotate(-2deg); }
+#add-urbex-btn:active { transform: scale(0.95) rotate(2deg); }
+
+/* List */
+#urbex-list { list-style: none; padding: 0; margin: 0; }
+#urbex-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid #eee;
+}
+#urbex-list li button {
+  background: none; border: none; color: #c00; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#urbex-list li button:hover { transform: scale(1.05) rotate(-2deg); }
+#urbex-list li button:active { transform: scale(0.95) rotate(2deg); }
+
+/* Todo List */
+.todo-content h4 {
+  margin: 10px 0 5px 0;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+.todo-list li button {
+  background: none;
+  border: none;
+  color: #0077cc;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.todo-list li button:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+.todo-list li button:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+/* Map Click Panel */
+#map-click-panel {
+  position: absolute; left: 20px; background: white; padding: 10px;
+  border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1001; width: 300px; overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0; max-height: 0; pointer-events: none;
+}
+#map-click-panel.visible {
+  opacity: 1; max-height: 500px; pointer-events: auto;
+}
+
+#map-click-panel .panel-header {
+  font-weight: 700;
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+}
+#map-click-panel .panel-header:active {
+  cursor: grabbing;
+}
+#map-click-panel .cerrar {
+  background: none;
+  border: none;
+  color: #c00;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#map-click-panel .cerrar:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+#map-click-panel .cerrar:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+#map-click-panel label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+#map-click-panel input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  margin-bottom: 12px;
+  transition: border-color 0.3s ease;
+}
+#map-click-panel input[type="text"]:focus {
+  border-color: #10b981;
+  outline: none;
+}
+
+#map-click-panel #map-click-coords {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+#map-click-panel #save-map-click-btn {
+  width: 100%;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#map-click-panel #save-map-click-btn:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+#map-click-panel #save-map-click-btn:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+/* Nuevo hub de usuario en la parte superior derecha */
+#user-hub {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.user-profile-container {
+  position: relative;
+}
+
+.user-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 25px;
+  padding: 8px 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.user-profile-button:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.user-profile-button .dropdown-arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.user-profile-button.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  min-width: 280px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.user-dropdown.hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.user-avatar-large {
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.user-email {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.user-actions {
+  padding: 10px;
+}
+
+.user-action-btn {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.user-action-btn:hover {
+  background: #e9ecef;
+}
+
+.user-action-btn.logout-btn {
+  background: #fee;
+  color: #e53e3e;
+}
+
+.user-action-btn.logout-btn:hover {
+  background: #fcc;
+}

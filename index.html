@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MAPA URBEX</title>
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>🏚</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <!-- Logout button added to search panel -->
+  <div id="search-panel">
+    <input type="search" id="search-input" placeholder="Buscar ciudad o pueblo..." />
+    <button id="search-btn">Buscar</button>
+    <button id="clear-marker-btn">Eliminar marcador</button>
+    <span id="version-info">Beta v1.1.0</span>
+  </div>
+
+  <!-- Nuevo hub de usuario en la parte superior derecha -->
+  <div id="user-hub">
+    <div class="user-profile-container">
+      <button id="user-profile-btn" class="user-profile-button">
+        <span id="user-avatar">👤</span>
+        <span id="user-name-display">Usuario</span>
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      
+      <div id="user-dropdown-panel" class="user-dropdown hidden">
+        <div class="user-info">
+          <div class="user-avatar-large">👤</div>
+          <div class="user-details">
+            <div id="dropdown-user-name" class="user-name">Nombre Usuario</div>
+            <div id="dropdown-user-email" class="user-email">usuario@email.com</div>
+          </div>
+        </div>
+        
+        <div class="user-actions">
+          <button id="change-password-btn" class="user-action-btn">
+            🔑 Cambiar Contraseña
+          </button>
+          <button id="logout-btn-new" class="user-action-btn logout-btn">
+            🚪 Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="urbex-hud">
+    <button id="open-urbex-btn" class="btn-anim">Añadir lugares</button>
+    <button id="open-todo-btn" class="btn-anim" style="margin-top: 8px;">Lista toodo</button>
+  </div>
+
+  
+  <div id="changelog">
+    <div class="panel-header">
+      <strong>Registro de cambios</strong>
+      <button class="cerrar" id="close-changelog-btn">✖</button>
+    </div>
+    <div class="changelog-content"></div>
+  </div>
+
+  <div id="urbex-panel">
+    <div class="panel-header">
+      <strong>Lugares Urbex</strong>
+      <button class="cerrar" id="close-urbex-btn">✖</button>
+    </div>
+    <div class="urbex-input-group">
+      <input type="text" id="urbex-input" placeholder="Dirección..." />
+      <button id="add-urbex-btn">Añadir</button>
+    </div>
+    <ul id="urbex-list"></ul>
+  </div>
+
+  <div id="todo-panel" class="panel">
+    <div class="panel-header">
+      <strong>Lista TooDo</strong>
+      <button class="cerrar" id="close-todo-btn">✖</button>
+    </div>
+    <div class="todo-content">
+      <h4>Explorados</h4>
+      <ul id="explored-list" class="todo-list"></ul>
+      <h4>No explorados</h4>
+      <ul id="unexplored-list" class="todo-list"></ul>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <div id="map-click-panel" class="panel">
+    <div class="panel-header">
+      <strong>Nuevo Lugar</strong>
+      <button class="cerrar" id="close-map-click-panel">✖</button>
+    </div>
+    <div class="map-click-content" style="padding: 10px;">
+      <label for="map-click-name">Nombre:</label>
+      <input type="text" id="map-click-name" placeholder="Nombre del lugar" style="width: 100%; margin-bottom: 10px; padding: 6px; border-radius: 6px; border: 1px solid #ccc;" />
+      <div id="map-click-coords" style="font-size: 0.9em; color: #555; margin-bottom: 10px;"></div>
+      <button id="save-map-click-btn" class="btn-anim" style="width: 100%;">Guardar</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="supabase-auth-service.js"></script>
+  <script>
+    // Check if user is logged in with Supabase
+    async function checkAuth() {
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
+      if (!session) {
+        window.location.href = 'login.html';
+      }
+    }
+    checkAuth();
+  </script>
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script defer src="main.js"></script>
+  <script defer src="urbex.js"></script>
+  <script>
+    // Add logout functionality with Supabase
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+            const result = await window.supabaseAuthService.logout();
+            if (result.success) {
+              window.location.href = 'login.html';
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
