@@ -242,12 +242,91 @@ html, body {
   transform: scale(0.95) rotate(2deg);
 }
 
-/* Nuevo hub de usuario en la parte superior derecha */
+/* Nuevo hub de usuario en la parte superior derecha - TAMAÑO MEDIO */
 #user-hub {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px; /* Alineado verticalmente con el HUD izquierdo */
+  right: 20px; /* Posición derecha simétrica al HUD izquierdo */
   z-index: 1000;
+}
+
+#user-hub .user-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Espacio moderado */
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 25px; /* Redondeado moderado */
+  padding: 12px 20px; /* Tamaño moderado */
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-size: 16px; /* Fuente moderada */
+  font-weight: 600;
+}
+
+#user-hub .user-profile-button:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+#user-hub #user-avatar {
+  font-size: 22px; /* Avatar moderado */
+}
+
+#user-hub #user-name-display {
+  font-size: 16px; /* Texto moderado */
+  font-weight: 600;
+}
+
+#user-hub .dropdown-arrow {
+  font-size: 14px; /* Flecha moderada */
+}
+
+/* Panel desplegable del usuario - TAMAÑO MEDIO */
+#user-hub .user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 15px; /* Redondeado moderado */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  min-width: 280px; /* Ancho moderado */
+  max-width: 320px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+#user-hub .user-info {
+  padding: 20px; /* Espacio moderado */
+}
+
+#user-hub .user-avatar-large {
+  font-size: 45px; /* Avatar moderado */
+  width: 65px;
+  height: 65px;
+}
+
+#user-hub .user-name {
+  font-size: 18px; /* Nombre moderado */
+  font-weight: 700;
+}
+
+#user-hub .user-email {
+  font-size: 14px; /* Email moderado */
+}
+
+#user-hub .user-actions {
+  padding: 15px 20px; /* Espacio moderado */
+}
+
+#user-hub .user-action-btn {
+  padding: 12px 18px; /* Botones moderados */
+  font-size: 14px; /* Texto moderado */
+  margin-bottom: 8px;
+  border-radius: 8px; /* Redondeado moderado */
 }
 
 .user-profile-container {
