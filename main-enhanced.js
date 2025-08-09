@@ -36,12 +36,15 @@ class UrbexApp {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    // Save map state changes
-    this.map.on('moveend', () => {
-      if (this.isLoggedIn) {
-        this.saveMapState();
-      }
-    });
+  // Save map state changes with debouncing
+  this.map.on('moveend', () => {
+    if (this.isLoggedIn) {
+      window.autoSaveService.saveMapState({
+        center: [this.map.getCenter().lat, this.map.getCenter().lng],
+        zoom: this.map.getZoom()
+      });
+    }
+  });
   }
 
   async initializeUserSession() {

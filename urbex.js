@@ -1,10 +1,111 @@
 document.addEventListener('DOMContentLoaded', () => {
   const map = window.urbexMap;
   const listEl = document.getElementById('urbex-list');
+  let currentUser = null;
+
+  // Get current user
+  async function getCurrentUser() {
+    try {
+      const { data: { user } } = await window.supabaseClient.auth.getUser();
+      currentUser = user;
+      if (user) {
+        await window.userSettingsService.initialize(user);
+      }
+      return user;
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
+  }
+
+  // Save user action to database
+  async function saveUserAction(actionType, actionData) {
+    if (!currentUser) {
+      console.warn('No user logged in, cannot save action');
+      return;
+    }
+
+    try {
+      const { error } = await window.supabaseClient
+        .from('user_activity')
+        .insert({
+          user_id: currentUser.id,
+          action_type: actionType,
+          action_data: actionData
+        });
+
+      if (error) {
+        console.error('Error saving user action:', error);
+      }
+    } catch (error) {
+      console.error('Error saving user action:', error);
+    }
+  }
+
+  // Save user location to database
+  async function saveUserLocation(name, lat, lng, description = '', category = 'urbex') {
+    if (!currentUser) {
+      console.warn('No user logged in, cannot save location');
+      return false;
+    }
+
+    try {
+      const result = await window.userSettingsService.saveLocation({
+        name: name,
+        latitude: lat,
+        longitude: lng,
+        description: description,
+        category: category
+      });
+
+      if (result.success) {
+        console.log('Location saved successfully:', name);
+        return true;
+      } else {
+        console.error('Error saving user location:', result.error);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error saving user location:', error);
+      return false;
+    }
+  }
+
+  // Load user locations from database
+  async function loadUserLocations() {
+    if (!currentUser) return;
+
+    try {
+      const locations = await window.userSettingsService.getSavedLocations();
+      
+      // Clear existing markers
+      markers.forEach(marker => map.removeLayer(marker));
+      markers.clear();
+      listEl.innerHTML = '';
+      todoSites.explored = [];
+      todoSites.unexplored = [];
+
+      // Add loaded locations
+      locations.forEach(location => {
+        addUrbexSite(location.latitude, location.longitude, location.name, false); // Don't save again
+        // Mark as explored if it has a description
+        if (location.description && location.description.trim() !== '') {
+          todoSites.unexplored = todoSites.unexplored.filter(s => s !== location.name);
+          todoSites.explored.push(location.name);
+          const marker = markers.get(location.name);
+          if (marker) marker.setIcon(greenIcon);
+        }
+      });
+      
+      renderTodoLists();
+      console.log('Loaded', locations.length, 'locations from database');
+    } catch (error) {
+      console.error('Error loading user locations:', error);
+    }
+  }
 
   const togglePanel = () => {
     const panel = document.getElementById('urbex-panel');
-    // const mapClickPanel = document.getElementById('map-click-panel');
     
     if (panel.classList.contains('visible')) {
       panel.classList.remove('visible');
@@ -13,11 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
       panel.style.top = '185px';
       panel.classList.add('visible');
     }
-    
-    // Removed repositioning of map-click-panel to prevent it moving when urbex panel toggles
-    // if (mapClickPanel.classList.contains('visible')) {
-    //   positionMapClickPanel();
-    // }
   };
   document.getElementById('open-urbex-btn').addEventListener('click', togglePanel);
   document.getElementById('close-urbex-btn').addEventListener('click', togglePanel);
@@ -112,29 +208,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Function to add a new urbex site with marker and add to unexplored list
-  function addUrbexSite(lat, lon, label) {
+  async function addUrbexSite(lat, lon, label, saveToDatabase = true) {
     const marker = L.marker([lat, lon], { icon: blueIcon }).addTo(map).bindPopup(label);
     markers.set(label, marker);
 
     const li = document.createElement('li');
     li.textContent = label;
+    
+    // Add save to database button
+    // Auto-save functionality - remove manual save button
+    // The save will happen automatically when data changes
+    
     const btn = document.createElement('button');
     btn.textContent = 'Eliminar';
-    btn.onclick = () => {
+    btn.onclick = async () => {
+      // Remove from database if saved
+      if (currentUser) {
+        try {
+          await window.supabaseClient
+            .from('user_saved_locations')
+            .delete()
+            .eq('user_id', currentUser.id)
+            .eq('name', label);
+          
+          await saveUserAction('site_deleted', { name: label, lat, lng });
+          
+          // Auto-save confirmation
+          window.notificationSystem.success('Lugar eliminado y guardado automáticamente');
+        } catch (error) {
+          console.error('Error deleting from database:', error);
+          window.notificationSystem.error('Error al eliminar el lugar');
+        }
+      }
+      
       map.removeLayer(marker);
       li.remove();
-      // Remove from todo lists and markers map
       todoSites.explored = todoSites.explored.filter(s => s !== label);
       todoSites.unexplored = todoSites.unexplored.filter(s => s !== label);
       markers.delete(label);
       renderTodoLists();
     };
+    
     li.appendChild(btn);
     listEl.appendChild(li);
 
     // Add to unexplored todo list and render
     todoSites.unexplored.push(label);
     renderTodoLists();
+
+    // Save to database if requested
+    if (saveToDatabase && currentUser) {
+      await saveUserLocation(label, lat, lon, '', 'urbex');
+      await saveUserAction('site_added', { name: label, lat, lng });
+    }
   }
 
   document.getElementById('add-urbex-btn').addEventListener('click', async () => {
@@ -144,8 +270,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await res.json();
     if (!data[0]) return alert('Dirección no encontrada');
     const { lat, lon } = data[0];
-    addUrbexSite(lat, lon, addr);
+    await addUrbexSite(lat, lon, addr);
     document.getElementById('urbex-input').value = '';
+    
+    // Auto-save confirmation
+    window.notificationSystem.success('Lugar añadido y guardado automáticamente');
   });
 
   // New draggable function copied from main.js
