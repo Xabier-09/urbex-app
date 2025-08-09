@@ -119,11 +119,20 @@
   </script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script defer src="main.js"></script>
+  <script defer src="main-enhanced.js"></script>
   <script defer src="urbex.js"></script>
+  <script defer src="save-integration-service.js"></script>
+  <script defer src="save-system.js"></script>
+  <script defer src="auto-save-service.js"></script>
+  <script defer src="debug-save-service.js"></script>
+  <script defer src="notification-system.js"></script>
+  <script defer src="auth-service.js"></script>
+  <script defer src="user-settings-service.js"></script>
+  <!-- Removed missing user-sites-service.js to fix 404 error -->
   <script>
     // Add logout functionality with Supabase
     document.addEventListener('DOMContentLoaded', () => {
-      const logoutBtn = document.getElementById('logout-btn');
+      const logoutBtn = document.getElementById('logout-btn-new');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
           if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {

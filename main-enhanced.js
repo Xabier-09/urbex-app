@@ -195,7 +195,7 @@ class UrbexApp {
     
     // Update login/logout buttons
     const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
+    const logoutBtn = document.getElementById('logout-btn-new');
     
     if (loginBtn) loginBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'block';
@@ -203,29 +203,44 @@ class UrbexApp {
 
   setupEventListeners() {
     // Search functionality
-    document.getElementById('search-btn')?.addEventListener('click', async () => {
-      await this.searchLocation();
-    });
+    const searchBtn = document.getElementById('search-btn');
+    if (searchBtn) {
+      searchBtn.addEventListener('click', async () => {
+        await this.searchLocation();
+      });
+    }
 
     // Clear marker
-    document.getElementById('clear-marker-btn')?.addEventListener('click', () => {
-      this.clearMarker();
-    });
+    const clearMarkerBtn = document.getElementById('clear-marker-btn');
+    if (clearMarkerBtn) {
+      clearMarkerBtn.addEventListener('click', () => {
+        this.clearMarker();
+      });
+    }
 
     // Save current location
-    document.getElementById('save-current-location')?.addEventListener('click', () => {
-      this.promptSaveCurrentLocation();
-    });
+    const saveCurrentLocationBtn = document.getElementById('save-current-location');
+    if (saveCurrentLocationBtn) {
+      saveCurrentLocationBtn.addEventListener('click', () => {
+        this.promptSaveCurrentLocation();
+      });
+    }
 
     // Theme toggle
-    document.getElementById('theme-toggle')?.addEventListener('change', (e) => {
-      this.updateTheme(e.target.value);
-    });
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('change', (e) => {
+        this.updateTheme(e.target.value);
+      });
+    }
 
     // Language selector
-    document.getElementById('language-selector')?.addEventListener('change', (e) => {
-      this.updateLanguage(e.target.value);
-    });
+    const languageSelector = document.getElementById('language-selector');
+    if (languageSelector) {
+      languageSelector.addEventListener('change', (e) => {
+        this.updateLanguage(e.target.value);
+      });
+    }
   }
 
   setupUI() {

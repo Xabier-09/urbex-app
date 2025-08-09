@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const map = window.urbexMap;
   const listEl = document.getElementById('urbex-list');
   let currentUser = null;
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const locations = await window.userSettingsService.getSavedLocations();
-      
+
       // Clear existing markers
       markers.forEach(marker => map.removeLayer(marker));
       markers.clear();
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (marker) marker.setIcon(greenIcon);
         }
       });
-      
+
       renderTodoLists();
       console.log('Loaded', locations.length, 'locations from database');
     } catch (error) {
@@ -104,9 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Panel toggles
   const togglePanel = () => {
     const panel = document.getElementById('urbex-panel');
-    
+
     if (panel.classList.contains('visible')) {
       panel.classList.remove('visible');
     } else {
@@ -115,14 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
       panel.classList.add('visible');
     }
   };
-  document.getElementById('open-urbex-btn').addEventListener('click', togglePanel);
-  document.getElementById('close-urbex-btn').addEventListener('click', togglePanel);
+  document.getElementById('open-urbex-btn')?.addEventListener('click', togglePanel);
+  document.getElementById('close-urbex-btn')?.addEventListener('click', togglePanel);
 
-  // Todo panel toggle
   const toggleTodoPanel = () => {
     const panel = document.getElementById('todo-panel');
-    // const mapClickPanel = document.getElementById('map-click-panel');
-    
+
     if (panel.classList.contains('visible')) {
       panel.classList.remove('visible');
     } else {
@@ -130,14 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
       panel.style.top = '300px';
       panel.classList.add('visible');
     }
-    
-    // Removed repositioning of map-click-panel to prevent it moving when todo panel toggles
-    // positionMapClickPanel();
   };
-  document.getElementById('open-todo-btn').addEventListener('click', toggleTodoPanel);
-  document.getElementById('close-todo-btn').addEventListener('click', toggleTodoPanel);
+  document.getElementById('open-todo-btn')?.addEventListener('click', toggleTodoPanel);
+  document.getElementById('close-todo-btn')?.addEventListener('click', toggleTodoPanel);
 
-  // Custom blue and green icons for markers
+  // Marker icons
   const blueIcon = new L.Icon({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
@@ -157,20 +153,66 @@ document.addEventListener('DOMContentLoaded', () => {
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
   });
 
-  // Data structure to hold todo sites and their markers
-  const todoSites = {
-    explored: [],
-    unexplored: []
-  };
-  const markers = new Map(); // Map site label to marker
-
+  // Data
+  const todoSites = { explored: [], unexplored: [] };
+  const markers = new Map();
   const exploredListEl = document.getElementById('explored-list');
   const unexploredListEl = document.getElementById('unexplored-list');
 
-  // Function to render todo lists
+  // Save todo list
+  async function saveTodoList() {
+    if (!currentUser) {
+      console.warn('No user logged in, cannot save todo list');
+      return;
+    }
+
+    try {
+      const exploredData = todoSites.explored.map(name => {
+        const marker = markers.get(name);
+        return {
+          name,
+          latitude: marker ? marker.getLatLng().lat : null,
+          longitude: marker ? marker.getLatLng().lng : null,
+          explored: true
+        };
+      });
+      const unexploredData = todoSites.unexplored.map(name => {
+        const marker = markers.get(name);
+        return {
+          name,
+          latitude: marker ? marker.getLatLng().lat : null,
+          longitude: marker ? marker.getLatLng().lng : null,
+          explored: false
+        };
+      });
+
+      const allData = [...exploredData, ...unexploredData];
+
+      await window.supabaseClient
+        .from('user_saved_locations')
+        .delete()
+        .eq('user_id', currentUser.id);
+
+      const { error } = await window.supabaseClient
+        .from('user_saved_locations')
+        .insert(allData.map(loc => ({ ...loc, user_id: currentUser.id })));
+
+      if (error) {
+        console.error('Error saving todo list:', error);
+        window.notificationSystem.error('Error al guardar la lista TooDo');
+      } else {
+        window.notificationSystem.success('Lista TooDo guardada automáticamente');
+      }
+    } catch (error) {
+      console.error('Error saving todo list:', error);
+      window.notificationSystem.error('Error al guardar la lista TooDo');
+    }
+  }
+
+  // Render todo lists (single implementation)
   function renderTodoLists() {
-    exploredListEl.innerHTML = '';
-    unexploredListEl.innerHTML = '';
+    if (exploredListEl) exploredListEl.innerHTML = '';
+    if (unexploredListEl) unexploredListEl.innerHTML = '';
 
     todoSites.explored.forEach(site => {
       const li = document.createElement('li');
@@ -180,13 +222,13 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.onclick = () => {
         todoSites.explored = todoSites.explored.filter(s => s !== site);
         todoSites.unexplored.push(site);
-        // Update marker icon to blue
         const marker = markers.get(site);
         if (marker) marker.setIcon(blueIcon);
         renderTodoLists();
+        saveTodoList();
       };
       li.appendChild(btn);
-      exploredListEl.appendChild(li);
+      exploredListEl?.appendChild(li);
     });
 
     todoSites.unexplored.forEach(site => {
@@ -197,90 +239,90 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.onclick = () => {
         todoSites.unexplored = todoSites.unexplored.filter(s => s !== site);
         todoSites.explored.push(site);
-        // Update marker icon to green
         const marker = markers.get(site);
         if (marker) marker.setIcon(greenIcon);
         renderTodoLists();
+        saveTodoList();
       };
       li.appendChild(btn);
-      unexploredListEl.appendChild(li);
+      unexploredListEl?.appendChild(li);
     });
   }
 
-  // Function to add a new urbex site with marker and add to unexplored list
-  async function addUrbexSite(lat, lon, label, saveToDatabase = true) {
-    const marker = L.marker([lat, lon], { icon: blueIcon }).addTo(map).bindPopup(label);
+  // Add new urbex site
+  async function addUrbexSite(lat, lng, label, saveToDatabase = true) {
+    const marker = L.marker([lat, lng], { icon: blueIcon }).addTo(map).bindPopup(label);
     markers.set(label, marker);
 
     const li = document.createElement('li');
     li.textContent = label;
-    
-    // Add save to database button
-    // Auto-save functionality - remove manual save button
-    // The save will happen automatically when data changes
-    
+
     const btn = document.createElement('button');
     btn.textContent = 'Eliminar';
-    btn.onclick = async () => {
-      // Remove from database if saved
+    btn.onclick = () => {
       if (currentUser) {
-        try {
-          await window.supabaseClient
-            .from('user_saved_locations')
-            .delete()
-            .eq('user_id', currentUser.id)
-            .eq('name', label);
-          
-          await saveUserAction('site_deleted', { name: label, lat, lng });
-          
-          // Auto-save confirmation
-          window.notificationSystem.success('Lugar eliminado y guardado automáticamente');
-        } catch (error) {
-          console.error('Error deleting from database:', error);
-          window.notificationSystem.error('Error al eliminar el lugar');
-        }
+        window.supabaseClient
+          .from('user_saved_locations')
+          .delete()
+          .eq('user_id', currentUser.id)
+          .eq('name', label)
+          .then(() => {
+            saveUserAction('site_deleted', { name: label, lat, lng });
+            window.notificationSystem.success('Lugar eliminado y guardado automáticamente');
+          })
+          .catch(error => {
+            console.error('Error deleting from database:', error);
+            window.notificationSystem.error('Error al eliminar el lugar');
+          });
       }
-      
+
       map.removeLayer(marker);
       li.remove();
       todoSites.explored = todoSites.explored.filter(s => s !== label);
       todoSites.unexplored = todoSites.unexplored.filter(s => s !== label);
       markers.delete(label);
       renderTodoLists();
+      saveTodoList();
     };
-    
-    li.appendChild(btn);
-    listEl.appendChild(li);
 
-    // Add to unexplored todo list and render
+    li.appendChild(btn);
+    listEl?.appendChild(li);
+
     todoSites.unexplored.push(label);
     renderTodoLists();
 
-    // Save to database if requested
     if (saveToDatabase && currentUser) {
-      await saveUserLocation(label, lat, lon, '', 'urbex');
-      await saveUserAction('site_added', { name: label, lat, lng });
+      saveUserLocation(label, lat, lng, '', 'urbex');
+      saveUserAction('site_added', { name: label, lat, lng });
+      saveTodoList();
     }
   }
 
-  document.getElementById('add-urbex-btn').addEventListener('click', async () => {
-    const addr = document.getElementById('urbex-input').value.trim();
+  // Add-urbex button
+  document.getElementById('add-urbex-btn')?.addEventListener('click', async () => {
+    const addr = document.getElementById('urbex-input')?.value.trim();
     if (!addr) return;
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&countrycodes=es`);
-    const data = await res.json();
-    if (!data[0]) return alert('Dirección no encontrada');
-    const { lat, lon } = data[0];
-    await addUrbexSite(lat, lon, addr);
-    document.getElementById('urbex-input').value = '';
-    
-    // Auto-save confirmation
-    window.notificationSystem.success('Lugar añadido y guardado automáticamente');
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&countrycodes=es`);
+      const data = await res.json();
+      if (!data[0]) return alert('Dirección no encontrada');
+      const { lat, lon } = data[0];
+      await addUrbexSite(lat, lon, addr);
+      document.getElementById('urbex-input').value = '';
+      window.notificationSystem.success('Lugar añadido y guardado automáticamente');
+      await saveTodoList();
+    } catch (err) {
+      console.error('Error buscando dirección:', err);
+      alert('Error al buscar la dirección');
+    }
   });
 
-  // New draggable function copied from main.js
+  // Draggable helper (single copy)
   function hacerArrastrable(id) {
     const panel = document.getElementById(id);
+    if (!panel) return;
     const header = panel.querySelector('.panel-header');
+    if (!header) return;
 
     let isDragging = false;
     let offsetX = 0;
@@ -316,48 +358,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Show/hide functions for map click panel
+  // Map click panel
   const mapClickPanel = document.getElementById('map-click-panel');
   const mapClickNameInput = document.getElementById('map-click-name');
   const mapClickCoordsDiv = document.getElementById('map-click-coords');
   const saveMapClickBtn = document.getElementById('save-map-click-btn');
   const closeMapClickBtn = document.getElementById('close-map-click-panel');
-  const todoPanel = document.getElementById('todo-panel');
-
-  // Function to position the map-click-panel below the todo-panel
-  function positionMapClickPanel() {
-    const mapClickPanel = document.getElementById('map-click-panel');
-    // Remove dynamic positioning, set fixed position below todo-panel
-    mapClickPanel.style.top = '450px'; // Fixed position below todo-panel at 300px
-  }
 
   function showMapClickPanel(lat, lng) {
+    if (!mapClickCoordsDiv || !mapClickNameInput || !mapClickPanel) return;
     mapClickCoordsDiv.textContent = `Coordenadas: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
     mapClickNameInput.value = '';
-    
-    // Set fixed position below todo-panel
     mapClickPanel.style.top = '450px';
-    
-    // Show the panel after setting position
     mapClickPanel.classList.add('visible');
   }
 
   function hideMapClickPanel() {
-    mapClickPanel.classList.remove('visible');
+    mapClickPanel?.classList.remove('visible');
   }
 
-  closeMapClickBtn.addEventListener('click', () => {
-    hideMapClickPanel();
-  });
+  closeMapClickBtn?.addEventListener('click', hideMapClickPanel);
 
-  saveMapClickBtn.addEventListener('click', () => {
-    const name = mapClickNameInput.value.trim();
+  saveMapClickBtn?.addEventListener('click', () => {
+    const name = mapClickNameInput?.value.trim();
     if (!name) {
       alert('Por favor, introduce un nombre para el lugar.');
       return;
     }
-    const coordsText = mapClickCoordsDiv.textContent;
-    const coordsMatch = coordsText.match(/Coordenadas: ([\d.-]+), ([\d.-]+)/);
+    const coordsText = mapClickCoordsDiv?.textContent;
+    const coordsMatch = coordsText?.match(/Coordenadas: ([\d.-]+), ([\d.-]+)/);
     if (!coordsMatch) return;
     const lat = parseFloat(coordsMatch[1]);
     const lng = parseFloat(coordsMatch[2]);
@@ -365,17 +394,21 @@ document.addEventListener('DOMContentLoaded', () => {
     hideMapClickPanel();
   });
 
-  // Modify map click handler to show custom panel instead of prompt
-  map.off('click'); // Remove previous click handlers
-  map.on('click', e => {
-    const { lat, lng } = e.latlng;
-    showMapClickPanel(lat, lng);
-  });
+  if (map && map.off && map.on) {
+    try {
+      map.off('click');
+    } catch (e) {
+      // ignore if no previous handlers
+    }
+    map.on('click', e => {
+      const { lat, lng } = e.latlng;
+      showMapClickPanel(lat, lng);
+    });
+  }
 
-  // Make the new panel draggable
   hacerArrastrable('map-click-panel');
 
-  // Function to load and render changelog markdown
+  // Load changelog
   async function loadChangelog() {
     try {
       const response = await fetch('CHANGELOG.md');
@@ -392,12 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error loading changelog:', error);
     }
   }
-
-  // Load changelog when DOM content is loaded
   loadChangelog();
 
-  // --- Nuevo código para hub de usuario ---
-
+  // User hub
   const userProfileBtn = document.getElementById('user-profile-btn');
   const userDropdownPanel = document.getElementById('user-dropdown-panel');
   const userNameDisplay = document.getElementById('user-name-display');
@@ -406,40 +436,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const changePasswordBtn = document.getElementById('change-password-btn');
   const logoutBtnNew = document.getElementById('logout-btn-new');
 
-  // Toggle dropdown panel
-  userProfileBtn.addEventListener('click', () => {
-    userDropdownPanel.classList.toggle('hidden');
+  userProfileBtn?.addEventListener('click', () => {
+    userDropdownPanel?.classList.toggle('hidden');
     userProfileBtn.classList.toggle('active');
   });
 
-  // Close dropdown if clicked outside
   document.addEventListener('click', (event) => {
-    if (!userProfileBtn.contains(event.target) && !userDropdownPanel.contains(event.target)) {
-      userDropdownPanel.classList.add('hidden');
-      userProfileBtn.classList.remove('active');
+    if (!userProfileBtn?.contains(event.target) && !userDropdownPanel?.contains(event.target)) {
+      userDropdownPanel?.classList.add('hidden');
+      userProfileBtn?.classList.remove('active');
     }
   });
 
-  // Load user data from Supabase
   async function loadUserData() {
-    const { data: { user } } = await window.supabaseClient.auth.getUser();
-    if (user) {
-      userNameDisplay.textContent = user.user_metadata?.username || user.user_metadata?.full_name || user.email || 'Usuario';
-      dropdownUserName.textContent = user.user_metadata?.username || user.user_metadata?.full_name || user.email || 'Usuario';
-      dropdownUserEmail.textContent = user.email || '';
+    try {
+      const { data: { user } } = await window.supabaseClient.auth.getUser();
+      if (user) {
+        userNameDisplay && (userNameDisplay.textContent = user.user_metadata?.username || user.user_metadata?.full_name || user.email || 'Usuario');
+        dropdownUserName && (dropdownUserName.textContent = user.user_metadata?.username || user.user_metadata?.full_name || user.email || 'Usuario');
+        dropdownUserEmail && (dropdownUserEmail.textContent = user.email || '');
+      }
+    } catch (err) {
+      console.error('Error loading user data:', err);
     }
   }
-
   loadUserData();
 
-  // Change password button handler
-  changePasswordBtn.addEventListener('click', () => {
+  changePasswordBtn?.addEventListener('click', () => {
     alert('Funcionalidad para cambiar contraseña no implementada aún.');
-    // Aquí se podría abrir un modal o redirigir a una página para cambiar contraseña
   });
 
-  // Logout button handler
-  logoutBtnNew.addEventListener('click', async () => {
+  logoutBtnNew?.addEventListener('click', async () => {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
       const result = await window.supabaseAuthService.logout();
       if (result.success) {
@@ -447,4 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // Init: get user and load locations
+  await getCurrentUser();
+  await loadUserLocations();
 });

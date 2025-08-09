@@ -1,18 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const map = L.map('map', {
-    zoomControl: false,
-    minZoom: 6.5,
-    maxZoom: 19, attributionControl: false}).setView([40.4168, -3.7038], 6.5);
+  if (!window.urbexMap) {
+    const map = L.map('map', {
+      zoomControl: false,
+      minZoom: 6.5,
+      maxZoom: 19,
+      attributionControl: false
+    }).setView([40.4168, -3.7038], 6.5);
 
-  window.urbexMap = map;
+    window.urbexMap = map;
 
-  const bounds = L.latLngBounds([35, -10], [44.5, 5]);
-  map.setMaxBounds(bounds);
-  map.on('drag', () => map.panInsideBounds(bounds, { animate: false }));
+    const bounds = L.latLngBounds([35, -10], [44.5, 5]);
+    map.setMaxBounds(bounds);
+    map.on('drag', () => map.panInsideBounds(bounds, { animate: false }));
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+  }
+
+  const map = window.urbexMap;
 
   let currentMarker = null;
 
@@ -50,8 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
       el.classList.add('visible');
     }
   };
-  document.getElementById('version-info').addEventListener('click', toggleChangelog);
-  document.getElementById('close-changelog-btn').addEventListener('click', toggleChangelog);
+  const versionInfoBtn = document.getElementById('version-info');
+  if (versionInfoBtn) {
+    versionInfoBtn.addEventListener('click', toggleChangelog);
+  }
+  const closeChangelogBtn = document.getElementById('close-changelog-btn');
+  if (closeChangelogBtn) {
+    closeChangelogBtn.addEventListener('click', toggleChangelog);
+  }
 
   function hacerArrastrable(id) {
     const panel = document.getElementById(id);
