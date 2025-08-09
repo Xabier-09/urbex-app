@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (result.success) {
         console.log('Location saved successfully:', name);
+        await saveUserAction('location_saved', { name, lat, lng, category });
         return true;
       } else {
         console.error('Error saving user location:', result.error);
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Add loaded locations
       locations.forEach(location => {
-        addUrbexSite(location.latitude, location.longitude, location.name, false); // Don't save again
+        addUrbexSite(location.latitude, location.longitude, location.name, false);
         // Mark as explored if it has a description
         if (location.description && location.description.trim() !== '') {
           todoSites.unexplored = todoSites.unexplored.filter(s => s !== location.name);
@@ -167,45 +168,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-      const exploredData = todoSites.explored.map(name => {
-        const marker = markers.get(name);
-        return {
-          name,
-          latitude: marker ? marker.getLatLng().lat : null,
-          longitude: marker ? marker.getLatLng().lng : null,
-          explored: true
-        };
-      });
-      const unexploredData = todoSites.unexplored.map(name => {
-        const marker = markers.get(name);
-        return {
-          name,
-          latitude: marker ? marker.getLatLng().lat : null,
-          longitude: marker ? marker.getLatLng().lng : null,
-          explored: false
-        };
-      });
-
-      const allData = [...exploredData, ...unexploredData];
-
-      await window.supabaseClient
+      // Primero, obtener todas las ubicaciones actuales del usuario
+      const { data: existingLocations } = await window.supabaseClient
         .from('user_saved_locations')
-        .delete()
+        .select('*')
         .eq('user_id', currentUser.id);
 
-      const { error } = await window.supabaseClient
-        .from('user_saved_locations')
-        .insert(allData.map(loc => ({ ...loc, user_id: currentUser.id })));
-
-      if (error) {
-        console.error('Error saving todo list:', error);
-        window.notificationSystem.error('Error al guardar la lista TooDo');
-      } else {
-        window.notificationSystem.success('Lista TooDo guardada automáticamente');
+      // Actualizar el estado de exploración basado en las listas actuales
+      const allLocations = [...todoSites.explored, ...todoSites.unexplored];
+      
+      for (const name of allLocations) {
+        const marker = markers.get(name);
+        const isExplored = todoSites.explored.includes(name);
+        
+        if (marker) {
+          const lat = marker.getLatLng().lat;
+          const lng = marker.getLatLng().lng;
+          
+          // Buscar si ya existe esta ubicación
+          const existing = existingLocations?.find(loc => loc.name === name);
+          
+          if (existing) {
+            // Actualizar el estado de exploración
+            await window.supabaseClient
+              .from('user_saved_locations')
+              .update({ 
+                explored: isExplored,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', existing.id)
+              .eq('user_id', currentUser.id);
+          } else {
+            // Crear nueva ubicación
+            await window.supabaseClient
+              .from('user_saved_locations')
+              .insert({
+                user_id: currentUser.id,
+                name: name,
+                latitude: lat,
+                longitude: lng,
+                explored: isExplored,
+                category: 'urbex'
+              });
+          }
+        }
       }
+
+      window.notificationSystem.success('Lista TooDo guardada correctamente');
     } catch (error) {
       console.error('Error saving todo list:', error);
-      window.notificationSystem.error('Error al guardar la lista TooDo');
+      window.notificationSystem.error('Error al guardar la lista TooDo: ' + error.message);
     }
   }
 
@@ -259,21 +271,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const btn = document.createElement('button');
     btn.textContent = 'Eliminar';
-    btn.onclick = () => {
+    btn.onclick = async () => {
       if (currentUser) {
-        window.supabaseClient
-          .from('user_saved_locations')
-          .delete()
-          .eq('user_id', currentUser.id)
-          .eq('name', label)
-          .then(() => {
-            saveUserAction('site_deleted', { name: label, lat, lng });
-            window.notificationSystem.success('Lugar eliminado y guardado automáticamente');
-          })
-          .catch(error => {
-            console.error('Error deleting from database:', error);
-            window.notificationSystem.error('Error al eliminar el lugar');
-          });
+        try {
+          // Delete from database
+          const { error } = await window.supabaseClient
+            .from('user_saved_locations')
+            .delete()
+            .eq('user_id', currentUser.id)
+            .eq('name', label);
+
+          if (error) throw error;
+
+          saveUserAction('site_deleted', { name: label, lat, lng });
+          window.notificationSystem.success('Lugar eliminado y guardado automáticamente');
+        } catch (error) {
+          console.error('Error deleting from database:', error);
+          window.notificationSystem.error('Error al eliminar el lugar');
+        }
       }
 
       map.removeLayer(marker);
@@ -292,9 +307,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderTodoLists();
 
     if (saveToDatabase && currentUser) {
-      saveUserLocation(label, lat, lng, '', 'urbex');
-      saveUserAction('site_added', { name: label, lat, lng });
-      saveTodoList();
+      // Always save to database
+      const result = await saveUserLocation(label, lat, lng, '', 'urbex');
+      if (result.success) {
+        saveUserAction('site_added', { name: label, lat, lng });
+        saveTodoList();
+      }
     }
   }
 

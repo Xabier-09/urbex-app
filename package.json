@@ -4,6 +4,7 @@
   "description": "Aplicación web de exploración urbana (URBEX) con sistema completo de autenticación y gestión de lugares abandonados, desarrollada con tecnologías modernas y Supabase.",
   "main": "main.js",
   "scripts": {
+    "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,8 +17,5 @@
   "bugs": {
     "url": "https://github.com/Xabier-09/urbex-app/issues"
   },
-  "homepage": "https://github.com/Xabier-09/urbex-app#readme",
-  "devDependencies": {
-    "vite": "^7.1.1"
-  }
+  "homepage": "https://github.com/Xabier-09/urbex-app#readme"
 }
