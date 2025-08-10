@@ -7,7 +7,9 @@ const locationSchema = Joi.object({
   latitude: Joi.number().min(-90).max(90).required(),
   longitude: Joi.number().min(-180).max(180).required(),
   description: Joi.string().max(1000).optional(),
-  category: Joi.string().valid('urbex', 'explored', 'favorite').default('urbex')
+  category: Joi.string().valid('urbex', 'explored', 'favorite').default('urbex'),
+  explored: Joi.boolean().default(false),
+  color: Joi.string().valid('green', 'red', 'blue', 'yellow', 'purple', 'orange').optional()
 });
 
 const updateLocationSchema = Joi.object({
@@ -15,7 +17,9 @@ const updateLocationSchema = Joi.object({
   latitude: Joi.number().min(-90).max(90).optional(),
   longitude: Joi.number().min(-180).max(180).optional(),
   description: Joi.string().max(1000).optional(),
-  category: Joi.string().valid('urbex', 'explored', 'favorite').optional()
+  category: Joi.string().valid('urbex', 'explored', 'favorite').optional(),
+  explored: Joi.boolean().optional(),
+  color: Joi.string().valid('green', 'red', 'blue', 'yellow', 'purple', 'orange').optional()
 });
 
 const locationController = {
@@ -111,6 +115,7 @@ const locationController = {
 
       res.status(201).json({
         success: true,
+        message: 'Location added successfully',
         location: data
       });
     } catch (error) {
@@ -142,6 +147,7 @@ const locationController = {
 
       res.json({
         success: true,
+        message: 'Location updated successfully',
         location: data
       });
     } catch (error) {
