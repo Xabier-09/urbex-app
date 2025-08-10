@@ -57,7 +57,7 @@ html, body {
 #changelog {
   position: absolute; left: 20px; background: white; padding: 10px;
   border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  z-index: 1001; width: 400px; max-width: 90%;
+  z-index: 1001; width: 500px; max-width: 90%;
   overflow-y: auto; max-height: 80vh;
   opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
 }
