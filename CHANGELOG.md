@@ -1,3 +1,10 @@
+## v3.1.0 - CORRECCIÓN CRÍTICA DE GUARDADO DE ESTADO EXPLORADO
+
+* **FIX: Guardado correcto del estado "explorado"** - Ahora el servidor guarda correctamente cuando marcas un lugar como explorado
+* **FIX: Persistencia del color verde** - El color verde de los marcadores explorados se guarda y restaura correctamente
+* **FIX: Sincronización completa de estado** - Los cambios de estado explorado/no explorado se reflejan inmediatamente en la base de datos
+* **MEJORA: Carga precisa de estado** - Al iniciar sesión, los lugares explorados aparecen automáticamente con marcadores verdes
+
 ## v3.0.0 - REVOLUCIÓN EN GUARDADO DE DATOS Y RENDIMIENTO
 
 * **SISTEMA DE GUARDADO INTELIGENTE** - Todos tus marcadores, sitios explorados y configuraciones personales se guardan automáticamente en tu perfil

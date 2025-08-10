@@ -89,8 +89,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Add loaded locations
       locations.forEach(location => {
         addUrbexSite(location.latitude, location.longitude, location.name, false);
-        // Mark as explored if it has a description
-        if (location.description && location.description.trim() !== '') {
+        // Mark as explored based on explored field or color
+        const isExplored = location.explored || location.color === 'green';
+        if (isExplored) {
           todoSites.unexplored = todoSites.unexplored.filter(s => s !== location.name);
           todoSites.explored.push(location.name);
           const marker = markers.get(location.name);
@@ -189,11 +190,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           const existing = existingLocations?.find(loc => loc.name === name);
           
           if (existing) {
-            // Actualizar el estado de exploración
+            // Actualizar el estado de exploración y color
             await window.supabaseClient
               .from('user_saved_locations')
               .update({ 
                 explored: isExplored,
+                color: isExplored ? 'green' : null,
                 updated_at: new Date().toISOString()
               })
               .eq('id', existing.id)
@@ -208,6 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 latitude: lat,
                 longitude: lng,
                 explored: isExplored,
+                color: isExplored ? 'green' : null,
                 category: 'urbex'
               });
           }
