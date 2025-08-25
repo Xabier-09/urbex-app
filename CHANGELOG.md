@@ -1,3 +1,10 @@
+## v3.2.0 - MEJORA DE INTERFAZ Y ACCESIBILIDAD
+
+* **NUEVO: Botón de hamburguesa** - Añadido botón de menú hamburguesa (≡) en la esquina superior izquierda para controlar la barra lateral
+* **MEJORA: Barra lateral oculta por defecto** - La barra lateral ahora inicia oculta para maximizar el espacio del mapa
+* **MEJORA: Accesibilidad mejorada** - Control más intuitivo de la barra lateral con botón siempre visible
+* **MEJORA: Diseño consistente** - El botón de hamburguesa mantiene el estilo visual de la aplicación
+
 ## v3.1.0 - CORRECCIÓN CRÍTICA DE GUARDADO DE ESTADO EXPLORADO
 
 * **FIX: Guardado correcto del estado "explorado"** - Ahora el servidor guarda correctamente cuando marcas un lugar como explorado

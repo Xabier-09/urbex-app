@@ -12,15 +12,60 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <!-- Logout button added to search panel -->
+  <!-- Modern Sidebar -->
+  <div id="sidebar" class="collapsed">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🏚</span>
+        <span class="logo-text">URBEX</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <button id="sidebar-todo" class="nav-btn" data-panel="todo">
+        <span class="nav-icon">📋</span>
+        <span class="nav-text">Lista todo</span>
+      </button>
+      
+      <button id="sidebar-urbex" class="nav-btn" data-panel="urbex">
+        <span class="nav-icon">📍</span>
+        <span class="nav-text">Añadir lugares</span>
+      </button>
+      
+      <button id="sidebar-social" class="nav-btn" data-panel="social">
+        <span class="nav-icon">👥</span>
+        <span class="nav-text">Social</span>
+      </button>
+      
+      <button id="sidebar-gallery" class="nav-btn" data-panel="gallery">
+        <span class="nav-icon">🖼️</span>
+        <span class="nav-text">Galería comunitaria</span>
+      </button>
+      
+      <button id="sidebar-create" class="nav-btn" data-panel="create">
+        <span class="nav-icon">✨</span>
+        <span class="nav-text">Crear</span>
+      </button>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div id="version-info">v3.1.0</div>
+    </div>
+  </div>
+
+  <!-- Hamburger menu button to toggle sidebar -->
+  <button id="hamburger-menu" class="hamburger-toggle">
+    <span class="hamburger-icon">≡</span>
+  </button>
+
+  <!-- Search panel moved to top -->
   <div id="search-panel">
     <input type="search" id="search-input" placeholder="Buscar ciudad o pueblo..." />
     <button id="search-btn">Buscar</button>
     <button id="clear-marker-btn">Eliminar marcador</button>
-    <span id="version-info">v3.1.0</span>
   </div>
 
-  <!-- Nuevo hub de usuario en la parte superior derecha -->
+  <!-- User hub remains in top right -->
   <div id="user-hub">
     <div class="user-profile-container">
       <button id="user-profile-btn" class="user-profile-button">
@@ -48,11 +93,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div id="urbex-hud">
-    <button id="open-urbex-btn" class="btn-anim">Añadir lugares</button>
-    <button id="open-todo-btn" class="btn-anim" style="margin-top: 8px;">Lista toodo</button>
   </div>
 
   

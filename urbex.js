@@ -386,11 +386,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const saveMapClickBtn = document.getElementById('save-map-click-btn');
   const closeMapClickBtn = document.getElementById('close-map-click-panel');
 
-  function showMapClickPanel(lat, lng) {
+function showMapClickPanel(lat, lng) {
     if (!mapClickCoordsDiv || !mapClickNameInput || !mapClickPanel) return;
     mapClickCoordsDiv.textContent = `Coordenadas: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
     mapClickNameInput.value = '';
-    mapClickPanel.style.top = '450px';
+    mapClickPanel.style.top = '150px';
     mapClickPanel.classList.add('visible');
   }
 

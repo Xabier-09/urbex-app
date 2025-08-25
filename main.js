@@ -1,4 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Hamburger menu functionality
+  const hamburgerMenu = document.getElementById('hamburger-menu');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const navButtons = document.querySelectorAll('.nav-btn');
+  
+  // Toggle sidebar with hamburger menu
+  hamburgerMenu?.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
+  
+  // Toggle sidebar with internal toggle button
+  sidebarToggle?.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
+
+  // Function to toggle the todo panel
+  function toggleTodoPanel() {
+    const todoPanel = document.getElementById('todo-panel');
+    todoPanel.classList.toggle('visible');
+  }
+
+  // Function to toggle the urbex panel
+  function togglePanel() {
+    const urbexPanel = document.getElementById('urbex-panel');
+    urbexPanel.classList.toggle('visible');
+  }
+
+  // Handle navigation button clicks
+  navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const panelType = button.getAttribute('data-panel');
+      
+      // Remove active class from all buttons
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to clicked button
+      button.classList.add('active');
+      
+      // Handle different panel types
+      switch(panelType) {
+        case 'todo':
+          toggleTodoPanel();
+          break;
+        case 'urbex':
+          togglePanel();
+          break;
+        case 'social':
+          // Placeholder for social functionality
+          alert('Funcionalidad Social - Próximamente');
+          break;
+        case 'gallery':
+          // Placeholder for gallery functionality
+          alert('Galería Comunitaria - Próximamente');
+          break;
+        case 'create':
+          // Placeholder for create functionality
+          alert('Crear - Próximamente');
+          break;
+      }
+    });
+  });
+
   if (!window.urbexMap) {
     const map = L.map('map', {
       zoomControl: false,
